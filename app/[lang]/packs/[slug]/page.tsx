@@ -66,20 +66,20 @@ export default function PackPage({ params }: Props) {
       </section>
 
       {/* SoundCloud Preview */}
-      {pack.tiers[0].soundcloudUrl && (
-        <section className="px-6 pb-16 max-w-7xl mx-auto">
-          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-6">{t.pack.preview}</p>
-          <iframe
-            width="100%"
-            height="166"
-            scrolling="no"
-            frameBorder="no"
-            allow="autoplay"
-            src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(pack.tiers[0].soundcloudUrl)}&color=%2339FF14&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`}
-            className="rounded-sm border border-gray-border"
-          />
-        </section>
-      )}
+     {pack.tiers[0].soundcloudUrl && (
+  <section className="px-6 pb-16 max-w-7xl mx-auto">
+    <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-6">{t.pack.preview}</p>
+    <iframe
+      width="100%"
+      height="300"
+      scrolling="no"
+      frameBorder="no"
+      allow="autoplay"
+      src={pack.tiers[0].soundcloudUrl}
+      className="rounded-sm border border-gray-border"
+    />
+  </section>
+)}
 
       {/* Tiers */}
       <section className="px-6 pb-24 max-w-7xl mx-auto">

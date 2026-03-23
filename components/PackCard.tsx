@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Pack } from '@/lib/packs'
 import { translations, type Locale } from '@/lib/i18n'
 
-type Props = { pack: Pack; index: number; lang?: Locale }
+type Props = { pack: Pack; index?: number; lang?: Locale }
 
 export function PackCard({ pack, lang = 'en' }: Props) {
   const t = translations[lang]

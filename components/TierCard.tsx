@@ -4,7 +4,20 @@ import { useState } from 'react'
 import { PackTier } from '@/lib/packs'
 import { translations } from '@/lib/i18n'
 
-type PackT = typeof translations['en']['pack']
+type PackT = {
+  back: string
+  preview: string
+  chooseTier: string
+  disclaimer: string
+  mostPopular: string
+  buyBtn: string
+  emailLabel: string
+  emailPlaceholder: string
+  proceedBtn: string
+  creatingInvoice: string
+  securePayment: string
+  emailError: string
+}
 
 type Props = {
   tier: PackTier
