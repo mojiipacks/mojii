@@ -3,7 +3,6 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-// Download links per tier — add your Google Drive links here
 const DOWNLOAD_LINKS: Record<string, string> = {
   'guitar-cutted': 'https://drive.google.com/your-cutted-link',
   'guitar-basic': 'https://drive.google.com/your-basic-link',
@@ -19,35 +18,31 @@ const TIER_NAMES: Record<string, string> = {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
+    console.log('WEBHOOK BODY:', body)
 
-    // Monobank sends status updates
-    const { invoiceId, status, reference } = body
+    const { status, reference } = body
 
-    // Only process successful payments
     if (status !== 'success') {
       return NextResponse.json({ ok: true })
     }
 
-    // reference format: "guitar-basic-1234567890"
-    const tierId = reference?.split('-').slice(0, 2).join('-') // e.g. "guitar-basic"
-
-    if (!tierId || !DOWNLOAD_LINKS[tierId]) {
-      console.error('Unknown tier from reference:', reference)
+    // reference format: "guitar-basic|user@email.com|1234567890"
+    const parts = reference?.split('|')
+    if (!parts || parts.length < 2) {
+      console.error('Invalid reference format:', reference)
       return NextResponse.json({ ok: true })
     }
 
-    // Get email — in production store invoiceId->email in a DB
-    // Here we rely on the invoice reference or a KV store
-    // For now: log and you can manually send if webhook doesn't have email
-    const email = body.finalAmount ? await getEmailFromInvoice(invoiceId) : null
+    const tierId = parts[0]
+    const email  = parts[1]
 
-    if (!email) {
-      console.error(`No email found for invoice ${invoiceId}. Manual delivery needed.`)
+    if (!DOWNLOAD_LINKS[tierId]) {
+      console.error('Unknown tierId:', tierId)
       return NextResponse.json({ ok: true })
     }
 
     const downloadUrl = DOWNLOAD_LINKS[tierId]
-    const packName = TIER_NAMES[tierId]
+    const packName    = TIER_NAMES[tierId]
 
     await resend.emails.send({
       from: 'MOJII <noreply@mojii.com>',
@@ -96,17 +91,9 @@ export async function POST(req: NextRequest) {
 
     console.log(`✅ Email sent to ${email} for ${packName}`)
     return NextResponse.json({ ok: true })
+
   } catch (err) {
     console.error('Webhook error:', err)
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })
   }
-}
-
-// Helper: retrieve email from KV store or DB
-// Replace with real implementation (Vercel KV, Supabase, etc.)
-async function getEmailFromInvoice(invoiceId: string): Promise<string | null> {
-  // TODO: implement with Vercel KV:
-  // const { kv } = await import('@vercel/kv')
-  // return await kv.get(`invoice:${invoiceId}`)
-  return null
 }
