@@ -69,6 +69,7 @@ export function TierCard({
       });
       const data = await res.json();
       if (data.pageUrl) {
+        if (data.invoiceId) sessionStorage.setItem("mojii_invoiceId", data.invoiceId);
         window.location.href = data.pageUrl;
       } else {
         throw new Error(data.error || "Failed to create invoice");
