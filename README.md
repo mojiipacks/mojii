@@ -1,112 +1,120 @@
-# MOJII — Setup Guide
+# MOJII
+
+Premium sample packs for producers. Next.js 14 + Tailwind CSS + Monobank Acquiring + Resend.
 
 ## Stack
-- **Next.js 14** — website + SEO + API routes
-- **Vercel** — free hosting
+
+- **Next.js 14** (App Router) — pages, API routes, SSG, i18n (en/uk)
+- **Tailwind CSS** — styling
 - **Monobank Acquiring** — payments (~1.5-2% commission)
-- **Resend** — automatic email delivery
-- **Google Drive** — file storage (free)
+- **Resend** — transactional email delivery
+- **Vercel** — hosting
+- **Google Drive** — file storage
 
----
+## Environment variables
 
-## Step 1 — Install & run locally
+| Variable               | Description                                                         | Example             |
+| ---------------------- | ------------------------------------------------------------------- | ------------------- |
+| `RESEND_API_KEY`       | [Resend](https://resend.com) API key                                | `re_xxxxx`          |
+| `RESEND_FROM_NAME`     | Sender display name                                                 | `MOJII`             |
+| `RESEND_FROM_EMAIL`    | Sender email (must be verified domain or resend.dev)                | `noreply@mojii.com` |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (used for redirects and webhook URLs)               | `https://mojii.com` |
+| `MONOBANK_TOKEN`       | Monobank API token ([docs](https://monobank.ua/api-docs/acquiring)) | `uXxx...`           |
+
+## Local setup
 
 ```bash
-npm install
-npm run dev
+cp .env.example .env
+pnpm install
+pnpm dev
 ```
 
 Open http://localhost:3000
 
----
+### Getting tokens
 
-## Step 2 — Set up Monobank Acquiring
+**Resend:** sign up at [resend.com](https://resend.com) -> API Keys -> Create. For testing, use `onboarding@resend.dev` as `RESEND_FROM_EMAIL` (sends only to account owner email).
 
-1. Open Monobank app → Business account (ФОП)
-2. Go to **Еквайринг** section
-3. Register merchant → get your **X-Token**
-4. Copy token to `.env.local` as `MONOBANK_TOKEN`
+**Monobank:** go to [api.monobank.ua](https://api.monobank.ua) -> activate a new token. This personal token works as a test token for acquiring API — no real money is charged, any Luhn-valid card number works.
 
----
+### Testing payment flow
 
-## Step 3 — Set up Resend
-
-1. Go to https://resend.com → sign up (free)
-2. Add your domain (mojii.com) → verify DNS
-3. Get API key → copy to `.env.local` as `RESEND_API_KEY`
-
----
-
-## Step 4 — Set up Google Drive downloads
-
-1. Upload each pack ZIP to Google Drive
-2. Right-click → Share → "Anyone with the link"
-3. Copy the link
-4. Paste into `app/api/webhook/route.ts` in `DOWNLOAD_LINKS` object:
-
-```ts
-const DOWNLOAD_LINKS: Record<string, string> = {
-  'guitar-cutted': 'https://drive.google.com/your-cutted-link',
-  'guitar-basic': 'https://drive.google.com/your-basic-link',
-  'guitar-extended': 'https://drive.google.com/your-extended-link',
-}
-```
-
----
-
-## Step 5 — Set up Vercel KV (for email <-> invoice mapping)
-
-1. Go to https://vercel.com → your project → Storage → Create KV database
-2. It auto-adds `KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN` to your env
-3. In `app/api/create-invoice/route.ts` — uncomment KV save code
-4. In `app/api/webhook/route.ts` — uncomment KV read code
-
----
-
-## Step 6 — Add SoundCloud previews
-
-1. Upload your preview track to SoundCloud
-2. Get the track URL (e.g. `https://soundcloud.com/mojii/guitar-pack-preview`)
-3. Paste into `lib/packs.ts` in the `soundcloudUrl` field
-
----
-
-## Step 7 — Deploy to Vercel
+Monobank webhooks need a public URL. Use a tunnel:
 
 ```bash
-npm install -g vercel
-vercel
+npx localtunnel --port 3000
 ```
 
-Or connect your GitHub repo at https://vercel.com/new
+Then update `.env`:
 
-Add environment variables in Vercel dashboard:
-- `MONOBANK_TOKEN`
-- `RESEND_API_KEY`
-- `NEXT_PUBLIC_SITE_URL=https://mojii.com`
+```
+NEXT_PUBLIC_SITE_URL=https://your-tunnel-url.loca.lt
+```
 
----
+Restart dev server. Now:
 
-## Step 8 — Add your domain
+1. Go to a pack page, click buy, enter email
+2. On Monobank test page: use any card number (e.g. `4111 1111 1111 1111`), any expiry, any CVV
+3. Webhook will hit your tunnel -> email sent -> redirect to success page
 
-1. Buy domain (Namecheap ~$10/yr for .com)
-2. Vercel → Project → Domains → Add `mojii.com`
-3. Update DNS at Namecheap as Vercel instructs
+Localtunnel URLs change on restart. Update `.env` and restart dev server each time.
 
----
+## Development
 
-## Adding more packs later
+| Command            | Description                     |
+| ------------------ | ------------------------------- |
+| `task dev`         | Start dev server                |
+| `task test`        | Run unit tests (vitest)         |
+| `task test:watch`  | Run tests in watch mode         |
+| `task build`       | Production build                |
+| `task lint`        | Format code (prettier)          |
+| `task type-check`  | TypeScript check                |
+| `task clean-start` | Nuke node_modules and reinstall |
 
-Edit `lib/packs.ts` — add a new object to the `packs` array. That's it. The page is auto-generated.
+## Git hooks (lefthook)
 
----
+- **pre-commit**: prettier + type-check
+- **commit-msg**: [conventional commits](https://www.conventionalcommits.org/) via commitlint
+- **pre-push**: tests + build
+
+## CI
+
+GitHub Actions runs on push/PR to `main`: type-check, test, build.
+
+## Vercel deployment
+
+Repo is connected to Vercel — push to `main` triggers a build.
+
+Set these env variables in Vercel dashboard (Settings -> Environment Variables):
+
+| Variable               | Value                     |
+| ---------------------- | ------------------------- |
+| `RESEND_API_KEY`       | Production Resend API key |
+| `RESEND_FROM_NAME`     | `MOJII`                   |
+| `RESEND_FROM_EMAIL`    | `noreply@mojii.com`       |
+| `NEXT_PUBLIC_SITE_URL` | `https://mojii.com`       |
+| `MONOBANK_TOKEN`       | Merchant acquiring token  |
+
+Before going live:
+
+- Verify `mojii.com` domain in Resend (Settings -> Domains -> add DNS records)
+- Get a real merchant token from Monobank (app -> Acquiring section)
+- Replace placeholder download URLs in `app/api/webhook/route.ts`
+
+## Adding a new locale
+
+Edit `lib/locales.ts` — add to `LOCALES`, `LOCALE_LABELS`. Add translations to `lib/i18n.ts`. Everything else picks it up automatically.
+
+## Adding more packs
+
+Add a new object to the `packs` array in `lib/packs.ts`. Pages are auto-generated.
 
 ## Commission summary
 
-| Service | Cost |
-|---|---|
-| Vercel hosting | Free |
-| Resend emails | Free (3000/month) |
-| Google Drive | Free |
-| Monobank commission | ~1.5–2% per sale |
-| **Total per $25 sale** | **~$0.40** |
+| Service                | Cost               |
+| ---------------------- | ------------------ |
+| Vercel hosting         | Free               |
+| Resend emails          | Free (3,000/month) |
+| Google Drive           | Free               |
+| Monobank commission    | ~1.5-2% per sale   |
+| **Total per $25 sale** | **~$0.40**         |

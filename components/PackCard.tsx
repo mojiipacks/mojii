@@ -1,48 +1,49 @@
-import Link from 'next/link'
-import { Pack } from '@/lib/packs'
-import { translations, type Locale } from '@/lib/i18n'
+import Link from "next/link";
+import { Pack } from "@/lib/packs";
+import { translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
-type Props = { pack: Pack; index?: number; lang?: Locale }
+type Props = { pack: Pack; lang?: Locale };
 
-export function PackCard({ pack, lang = 'en' }: Props) {
-  const t = translations[lang]
-  const minPrice = Math.min(...pack.tiers.map((t) => t.price))
-  const maxPrice = Math.max(...pack.tiers.map((t) => t.price))
+export function PackCard({ pack, lang = DEFAULT_LOCALE }: Props) {
+  const t = translations[lang];
+  const minPrice = Math.min(...pack.tiers.map((t) => t.price));
+  const maxPrice = Math.max(...pack.tiers.map((t) => t.price));
 
   return (
     <Link href={`/${lang}/packs/${pack.slug}`} className="group block">
       <article className="relative border border-gray-border bg-gloss overflow-hidden transition-all duration-300 hover:border-green-electric hover:shadow-[0_0_30px_#39FF1415]">
-        {/* Top accent line */}
         <div className="h-px bg-gradient-to-r from-transparent via-green-electric to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        {/* Placeholder visual area */}
         <div
           className="relative h-48 bg-matte flex items-center justify-center overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)',
+            background: "linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)",
           }}
         >
-          {/* Decorative grid */}
           <div
             className="absolute inset-0 opacity-10"
             style={{
-              backgroundImage: 'linear-gradient(#39FF14 1px, transparent 1px), linear-gradient(90deg, #39FF14 1px, transparent 1px)',
-              backgroundSize: '30px 30px',
+              backgroundImage:
+                "linear-gradient(#39FF14 1px, transparent 1px), linear-gradient(90deg, #39FF14 1px, transparent 1px)",
+              backgroundSize: "30px 30px",
             }}
           />
           <span
             className="relative text-6xl text-white/10 group-hover:text-green-electric/20 transition-colors duration-500"
-            style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '100px' }}
+            style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "100px" }}
           >
-            {pack.title.split(' ')[0][0]}
+            {pack.title.split(" ")[0][0]}
           </span>
         </div>
 
         <div className="p-6">
-          <p className="text-green-electric text-xs tracking-[0.3em] uppercase mb-2">{pack.genre}</p>
+          <p className="text-green-electric text-xs tracking-[0.3em] uppercase mb-2">
+            {pack.genre}
+          </p>
           <h3
             className="text-3xl text-white mb-1 group-hover:text-green-electric transition-colors duration-200"
-            style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+            style={{ fontFamily: "Bebas Neue, sans-serif" }}
           >
             MOJII {pack.title}
           </h3>
@@ -50,8 +51,7 @@ export function PackCard({ pack, lang = 'en' }: Props) {
 
           <div className="flex items-center justify-between">
             <span className="text-white text-sm">
-              {t.packs.from}{' '}
-              <span className="text-green-electric font-medium">${minPrice}</span>
+              {t.packs.from} <span className="text-green-electric font-medium">${minPrice}</span>
               <span className="text-gray-dim"> – ${maxPrice}</span>
             </span>
             <span className="text-green-electric text-xs tracking-widest uppercase group-hover:translate-x-1 transition-transform duration-200">
@@ -59,7 +59,6 @@ export function PackCard({ pack, lang = 'en' }: Props) {
             </span>
           </div>
 
-          {/* Tier pills */}
           <div className="flex gap-2 mt-4">
             {pack.tiers.map((tier) => (
               <span
@@ -73,5 +72,5 @@ export function PackCard({ pack, lang = 'en' }: Props) {
         </div>
       </article>
     </Link>
-  )
+  );
 }

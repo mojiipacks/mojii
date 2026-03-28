@@ -1,51 +1,93 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import crypto from "node:crypto";
+import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
+// TODO: replace with real download URLs
 const DOWNLOAD_LINKS: Record<string, string> = {
-  'guitar-cutted': 'https://drive.google.com/your-cutted-link',
-  'guitar-basic': 'https://drive.google.com/your-basic-link',
-  'guitar-extended': 'https://drive.google.com/your-extended-link',
-}
+  "guitar-cutted": "https://drive.google.com/your-cutted-link",
+  "guitar-basic": "https://drive.google.com/your-basic-link",
+  "guitar-extended": "https://drive.google.com/your-extended-link",
+};
 
 const TIER_NAMES: Record<string, string> = {
-  'guitar-cutted': 'GUITAR PACK — CUTTED',
-  'guitar-basic': 'GUITAR PACK — BASIC',
-  'guitar-extended': 'GUITAR PACK — EXTENDED',
+  "guitar-cutted": "GUITAR PACK — CUTTED",
+  "guitar-basic": "GUITAR PACK — BASIC",
+  "guitar-extended": "GUITAR PACK — EXTENDED",
+};
+
+let cachedPubKey: string | null = null;
+
+async function getMonobankPubKey(): Promise<string> {
+  if (cachedPubKey) return cachedPubKey;
+  const res = await fetch("https://api.monobank.ua/api/merchant/pubkey", {
+    headers: { "X-Token": process.env.MONOBANK_TOKEN! },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch pubkey: ${res.status}`);
+  const data = await res.json();
+  cachedPubKey = data.key;
+  return cachedPubKey!;
+}
+
+function verifySignature(rawBody: string, xSign: string, pubKeyBase64: string): boolean {
+  const signatureBuf = Buffer.from(xSign, "base64");
+  const publicKeyBuf = Buffer.from(pubKeyBase64, "base64");
+  const verify = crypto.createVerify("SHA256");
+  verify.write(rawBody);
+  verify.end();
+  return verify.verify(publicKeyBuf, signatureBuf);
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    console.log('WEBHOOK BODY:', body)
+    const rawBody = await req.text();
+    const xSign = req.headers.get("x-sign");
 
-    const { status, reference } = body
-
-    if (status !== 'success') {
-      return NextResponse.json({ ok: true })
+    if (xSign) {
+      const pubKey = await getMonobankPubKey();
+      if (!verifySignature(rawBody, xSign, pubKey)) {
+        console.error("Webhook signature verification failed");
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    } else if (process.env.NODE_ENV === "production") {
+      console.error("Missing X-Sign header in production");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // reference format: "guitar-basic|user@email.com|1234567890"
-    const parts = reference?.split('|')
+    const body = JSON.parse(rawBody);
+    console.log("WEBHOOK BODY:", body);
+
+    const { status, reference } = body;
+
+    if (status !== "success") {
+      return NextResponse.json({ ok: true });
+    }
+
+    const parts = reference?.split("|");
     if (!parts || parts.length < 2) {
-      console.error('Invalid reference format:', reference)
-      return NextResponse.json({ ok: true })
+      console.error("Invalid reference format:", reference);
+      return NextResponse.json({ ok: true });
     }
 
-    const tierId = parts[0]
-    const email  = parts[1]
+    const tierId = parts[0];
+    const email = parts[1];
+
+    if (!email || !/.+@.+\..+/.test(email)) {
+      console.error("Invalid email in reference:", reference);
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+    }
 
     if (!DOWNLOAD_LINKS[tierId]) {
-      console.error('Unknown tierId:', tierId)
-      return NextResponse.json({ ok: true })
+      console.error("Unknown tierId:", tierId);
+      return NextResponse.json({ ok: true });
     }
 
-    const downloadUrl = DOWNLOAD_LINKS[tierId]
-    const packName    = TIER_NAMES[tierId]
+    const downloadUrl = DOWNLOAD_LINKS[tierId];
+    const packName = TIER_NAMES[tierId];
 
     await resend.emails.send({
-      from: 'MOJII <noreply@mojii.com>',
+      from: `${process.env.RESEND_FROM_NAME} <${process.env.RESEND_FROM_EMAIL}>`,
       to: email,
       subject: `Your MOJII download is ready 🎸`,
       html: `
@@ -87,13 +129,12 @@ export async function POST(req: NextRequest) {
         </body>
         </html>
       `,
-    })
+    });
 
-    console.log(`✅ Email sent to ${email} for ${packName}`)
-    return NextResponse.json({ ok: true })
-
+    console.log(`✅ Email sent to ${email} for ${packName}`);
+    return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('Webhook error:', err)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    console.error("Webhook error:", err);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
