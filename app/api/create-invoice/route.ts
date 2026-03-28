@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { resolveLocale } from "@/lib/locales";
-import { saveInvoiceId } from "@/lib/invoice-store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -67,7 +66,6 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    saveInvoiceId(email, tierId, data.invoiceId);
     console.log(`Invoice created: ${data.invoiceId} for ${email}`);
 
     return NextResponse.json({

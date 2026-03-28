@@ -63,17 +63,6 @@ export const translations = {
         "Didn't receive the email? Check your spam folder or reply to our email for support.",
       backBtn: "Back to MOJII",
     },
-    successLoading: {
-      title1: "CHECKING",
-      title2: "PAYMENT",
-      subtitle: "Please wait while we verify your payment...",
-    },
-    successFailed: {
-      title1: "PAYMENT",
-      title2: "FAILED",
-      subtitle: "Something went wrong with your payment. Please try again.",
-      backBtn: "Back to MOJII",
-    },
   },
 
   uk: {
@@ -136,17 +125,6 @@ export const translations = {
       subtitle: "Посилання на завантаження вже в дорозі.",
       emailNote: "Перевір пошту на адресі",
       spamNote: "Не отримав листа? Перевір спам або напиши нам.",
-      backBtn: "Повернутись на MOJII",
-    },
-    successLoading: {
-      title1: "ПЕРЕВІРЯЄМО",
-      title2: "ОПЛАТУ",
-      subtitle: "Зачекайте, поки ми перевіримо вашу оплату...",
-    },
-    successFailed: {
-      title1: "ОПЛАТА",
-      title2: "НЕ ПРОЙШЛА",
-      subtitle: "Щось пішло не так з оплатою. Спробуйте ще раз.",
       backBtn: "Повернутись на MOJII",
     },
   },
