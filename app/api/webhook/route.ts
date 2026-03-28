@@ -1,51 +1,51 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const DOWNLOAD_LINKS: Record<string, string> = {
-  'guitar-cutted': 'https://drive.google.com/your-cutted-link',
-  'guitar-basic': 'https://drive.google.com/your-basic-link',
-  'guitar-extended': 'https://drive.google.com/your-extended-link',
-}
+  "guitar-cutted": "https://drive.google.com/your-cutted-link",
+  "guitar-basic": "https://drive.google.com/your-basic-link",
+  "guitar-extended": "https://drive.google.com/your-extended-link",
+};
 
 const TIER_NAMES: Record<string, string> = {
-  'guitar-cutted': 'GUITAR PACK — CUTTED',
-  'guitar-basic': 'GUITAR PACK — BASIC',
-  'guitar-extended': 'GUITAR PACK — EXTENDED',
-}
+  "guitar-cutted": "GUITAR PACK — CUTTED",
+  "guitar-basic": "GUITAR PACK — BASIC",
+  "guitar-extended": "GUITAR PACK — EXTENDED",
+};
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    console.log('WEBHOOK BODY:', body)
+    const body = await req.json();
+    console.log("WEBHOOK BODY:", body);
 
-    const { status, reference } = body
+    const { status, reference } = body;
 
-    if (status !== 'success') {
-      return NextResponse.json({ ok: true })
+    if (status !== "success") {
+      return NextResponse.json({ ok: true });
     }
 
     // reference format: "guitar-basic|user@email.com|1234567890"
-    const parts = reference?.split('|')
+    const parts = reference?.split("|");
     if (!parts || parts.length < 2) {
-      console.error('Invalid reference format:', reference)
-      return NextResponse.json({ ok: true })
+      console.error("Invalid reference format:", reference);
+      return NextResponse.json({ ok: true });
     }
 
-    const tierId = parts[0]
-    const email  = parts[1]
+    const tierId = parts[0];
+    const email = parts[1];
 
     if (!DOWNLOAD_LINKS[tierId]) {
-      console.error('Unknown tierId:', tierId)
-      return NextResponse.json({ ok: true })
+      console.error("Unknown tierId:", tierId);
+      return NextResponse.json({ ok: true });
     }
 
-    const downloadUrl = DOWNLOAD_LINKS[tierId]
-    const packName    = TIER_NAMES[tierId]
+    const downloadUrl = DOWNLOAD_LINKS[tierId];
+    const packName = TIER_NAMES[tierId];
 
     await resend.emails.send({
-      from: 'MOJII <noreply@mojii.com>',
+      from: "MOJII <onboarding@resend.dev>",
       to: email,
       subject: `Your MOJII download is ready 🎸`,
       html: `
@@ -87,13 +87,12 @@ export async function POST(req: NextRequest) {
         </body>
         </html>
       `,
-    })
+    });
 
-    console.log(`✅ Email sent to ${email} for ${packName}`)
-    return NextResponse.json({ ok: true })
-
+    console.log(`✅ Email sent to ${email} for ${packName}`);
+    return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('Webhook error:', err)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    console.error("Webhook error:", err);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
