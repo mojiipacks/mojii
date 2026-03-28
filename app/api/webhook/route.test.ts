@@ -8,10 +8,20 @@ vi.mock("resend", () => ({
   },
 }));
 
-function makeRequest(body: Record<string, unknown>) {
+vi.mock("node:crypto", () => ({
+  default: {
+    createVerify: () => ({
+      write: vi.fn(),
+      end: vi.fn(),
+      verify: vi.fn().mockReturnValue(false),
+    }),
+  },
+}));
+
+function makeRequest(body: Record<string, unknown>, headers?: Record<string, string>) {
   return new Request("http://localhost/api/webhook", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify(body),
   });
 }
@@ -24,6 +34,8 @@ describe("POST /api/webhook", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    vi.resetModules();
+    vi.unstubAllEnvs();
     const mod = await import("./route");
     POST = mod.POST as unknown as (req: Request) => Promise<Response>;
   });
@@ -119,6 +131,20 @@ describe("POST /api/webhook", () => {
     expect(mockSend).not.toHaveBeenCalled();
   });
 
+  it("rejects invalid email in reference", async () => {
+    const res = await POST(
+      makeRequest({
+        status: "success",
+        reference: "guitar-basic|not-an-email|123",
+      }),
+    );
+
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toBe("Invalid email");
+    expect(mockSend).not.toHaveBeenCalled();
+  });
+
   it("returns 500 when resend throws", async () => {
     mockSend.mockRejectedValueOnce(new Error("Resend API down"));
 
@@ -132,5 +158,19 @@ describe("POST /api/webhook", () => {
     expect(res.status).toBe(500);
     const data = await res.json();
     expect(data).toEqual({ error: "Internal error" });
+  });
+
+  it("rejects missing x-sign in production", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.resetModules();
+    const mod = await import("./route");
+    const prodPOST = mod.POST as unknown as (req: Request) => Promise<Response>;
+
+    const res = await prodPOST(
+      makeRequest({ status: "success", reference: "guitar-basic|test@test.com|123" }),
+    );
+
+    expect(res.status).toBe(401);
+    expect(mockSend).not.toHaveBeenCalled();
   });
 });

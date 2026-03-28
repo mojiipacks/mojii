@@ -17,14 +17,6 @@ const TIER_NAMES: Record<string, string> = {
   "guitar-extended": "GUITAR PACK — EXTENDED",
 };
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 let cachedPubKey: string | null = null;
 
 async function getMonobankPubKey(): Promise<string> {
@@ -80,6 +72,11 @@ export async function POST(req: NextRequest) {
 
     const tierId = parts[0];
     const email = parts[1];
+
+    if (!email || !/.+@.+\..+/.test(email)) {
+      console.error("Invalid email in reference:", reference);
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+    }
 
     if (!DOWNLOAD_LINKS[tierId]) {
       console.error("Unknown tierId:", tierId);

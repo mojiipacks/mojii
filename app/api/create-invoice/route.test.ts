@@ -59,6 +59,14 @@ describe("POST /api/create-invoice", () => {
     expect(data.error).toBe("Missing fields");
   });
 
+  it("returns 400 when email is invalid", async () => {
+    const res = await POST(makeRequest({ tierId: "guitar-basic", price: 15, email: "not-email" }));
+
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toBe("Missing fields");
+  });
+
   it("calls monobank API with correct body", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -82,6 +90,7 @@ describe("POST /api/create-invoice", () => {
     expect(sentBody.redirectUrl).toContain("https://mojii.com/en/success");
     expect(sentBody.redirectUrl).toContain("email=buyer%40example.com");
     expect(sentBody.webhookUrl).toBe("https://mojii.com/api/webhook");
+    expect(sentBody.cancelUrl).toBe("https://mojii.com/en/packs/guitar-pack");
   });
 
   it("returns pageUrl and invoiceId on success", async () => {

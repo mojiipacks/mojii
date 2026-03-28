@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       packSlug = "guitar-pack",
     } = await req.json();
 
-    if (!tierId || !price || !email) {
+    if (!tierId || !price || !email || !/.+@.+\..+/.test(email)) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
         ],
       },
       redirectUrl: successUrl,
+      cancelUrl,
       webhookUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook`,
       saveCardData: {
         saveCard: false,
