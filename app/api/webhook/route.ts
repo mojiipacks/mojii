@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     const packName = TIER_NAMES[tierId];
 
     await resend.emails.send({
-      from: "MOJII <onboarding@resend.dev>", // TODO: replace with verified domain email
+      from: `${process.env.RESEND_FROM_NAME} <${process.env.RESEND_FROM_EMAIL}>`,
       to: email,
       subject: `Your MOJII download is ready 🎸`,
       html: `
