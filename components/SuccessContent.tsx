@@ -7,31 +7,38 @@ import type { Locale } from "@/lib/locales";
 
 type PaymentStatus = "loading" | "success" | "failed";
 
-export function SuccessContent({ lang, email }: { lang: Locale; email?: string }) {
+export function SuccessContent({
+  lang,
+  email,
+  tier,
+}: {
+  lang: Locale;
+  email?: string;
+  tier?: string;
+}) {
   const t = translations[lang];
   const [status, setStatus] = useState<PaymentStatus>("loading");
 
   useEffect(() => {
-    const invoiceId = sessionStorage.getItem("mojii_invoiceId");
-    if (!invoiceId) {
+    if (!email || !tier) {
       setStatus("failed");
       return;
     }
 
     let cancelled = false;
     const check = async () => {
-      const res = await fetch(`/api/invoice-status?invoiceId=${invoiceId}`);
+      const res = await fetch(
+        `/api/invoice-status?email=${encodeURIComponent(email)}&tier=${encodeURIComponent(tier)}`,
+      );
       const data = await res.json();
       if (cancelled) return;
 
       if (data.status === "success") {
         setStatus("success");
-        sessionStorage.removeItem("mojii_invoiceId");
       } else if (data.status === "processing" || data.status === "created") {
         setTimeout(check, 2000);
       } else {
         setStatus("failed");
-        sessionStorage.removeItem("mojii_invoiceId");
       }
     };
 
@@ -39,7 +46,7 @@ export function SuccessContent({ lang, email }: { lang: Locale; email?: string }
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [email, tier]);
 
   const isSuccess = status === "success";
   const isLoading = status === "loading";

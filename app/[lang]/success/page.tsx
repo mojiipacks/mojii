@@ -16,5 +16,5 @@ export default function SuccessPage({
 }) {
   const lang = resolveLocale(params.lang);
 
-  return <SuccessContent lang={lang} email={searchParams.email} />;
+  return <SuccessContent lang={lang} email={searchParams.email} tier={searchParams.tier} />;
 }

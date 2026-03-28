@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getInvoiceId } from "@/lib/invoice-store";
 
 export async function GET(req: NextRequest) {
-  const invoiceId = req.nextUrl.searchParams.get("invoiceId");
+  const email = req.nextUrl.searchParams.get("email");
+  const tier = req.nextUrl.searchParams.get("tier");
 
+  if (!email || !tier) {
+    return NextResponse.json({ status: "unknown" });
+  }
+
+  const invoiceId = getInvoiceId(email, tier);
   if (!invoiceId) {
-    return NextResponse.json({ error: "Missing invoiceId" }, { status: 400 });
+    return NextResponse.json({ status: "unknown" });
   }
 
   const res = await fetch(
