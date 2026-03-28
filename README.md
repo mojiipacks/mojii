@@ -1,114 +1,82 @@
-# MOJII — Setup Guide
+# MOJII
+
+Premium sample packs for producers. Next.js 14 + Tailwind CSS + Monobank Acquiring + Resend.
 
 ## Stack
 
-- **Next.js 14** — website + SEO + API routes
-- **Vercel** — free hosting
+- **Next.js 14** (App Router) — pages, API routes, SSG, i18n (en/uk)
+- **Tailwind CSS** — styling
 - **Monobank Acquiring** — payments (~1.5-2% commission)
-- **Resend** — automatic email delivery
-- **Google Drive** — file storage (free)
+- **Resend** — transactional email delivery
+- **Vercel** — hosting
+- **Google Drive** — file storage
 
----
-
-## Step 1 — Install & run locally
+## Quick start
 
 ```bash
-npm install
-npm run dev
+cp .env.example .env
+pnpm install
+pnpm dev
 ```
 
 Open http://localhost:3000
 
----
+## Environment variables
 
-## Step 2 — Set up Monobank Acquiring
+| Variable               | Description                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `RESEND_API_KEY`       | [Resend](https://resend.com) API key for sending emails                      |
+| `NEXT_PUBLIC_SITE_URL` | Site URL (e.g. `https://mojii.com` or tunnel URL for dev)                    |
+| `MONOBANK_TOKEN`       | Monobank merchant API token ([docs](https://monobank.ua/api-docs/acquiring)) |
 
-1. Open Monobank app → Business account (ФОП)
-2. Go to **Еквайринг** section
-3. Register merchant → get your **X-Token**
-4. Copy token to `.env.local` as `MONOBANK_TOKEN`
+## Development
 
----
+| Command            | Description                     |
+| ------------------ | ------------------------------- |
+| `task dev`         | Start dev server                |
+| `task test`        | Run unit tests (vitest)         |
+| `task test:watch`  | Run tests in watch mode         |
+| `task build`       | Production build                |
+| `task lint`        | Format code (prettier)          |
+| `task type-check`  | TypeScript check                |
+| `task clean-start` | Nuke node_modules and reinstall |
 
-## Step 3 — Set up Resend
+## Testing payments locally
 
-1. Go to https://resend.com → sign up (free)
-2. Add your domain (mojii.com) → verify DNS
-3. Get API key → copy to `.env.local` as `RESEND_API_KEY`
+1. Get a test token from [api.monobank.ua](https://api.monobank.ua)
+2. Start a tunnel: `npx localtunnel --port 3000`
+3. Set `NEXT_PUBLIC_SITE_URL` to the tunnel URL in `.env`
+4. Restart dev server
+5. Use any card number that passes Luhn check, any expiry/CVV
 
----
+## Git hooks (lefthook)
 
-## Step 4 — Set up Google Drive downloads
+- **pre-commit**: prettier + type-check
+- **commit-msg**: [conventional commits](https://www.conventionalcommits.org/) via commitlint
+- **pre-push**: tests + build
 
-1. Upload each pack ZIP to Google Drive
-2. Right-click → Share → "Anyone with the link"
-3. Copy the link
-4. Paste into `app/api/webhook/route.ts` in `DOWNLOAD_LINKS` object:
+## CI
 
-```ts
-const DOWNLOAD_LINKS: Record<string, string> = {
-  "guitar-cutted": "https://drive.google.com/your-cutted-link",
-  "guitar-basic": "https://drive.google.com/your-basic-link",
-  "guitar-extended": "https://drive.google.com/your-extended-link",
-};
-```
+GitHub Actions runs on push/PR to `main`: type-check, test, build.
 
----
+## Adding a new locale
 
-## Step 5 — Set up Vercel KV (for email <-> invoice mapping)
+Edit `lib/locales.ts` — add to `LOCALES`, `LOCALE_LABELS`. Add translations to `lib/i18n.ts`. Everything else picks it up automatically.
 
-1. Go to https://vercel.com → your project → Storage → Create KV database
-2. It auto-adds `KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN` to your env
-3. In `app/api/create-invoice/route.ts` — uncomment KV save code
-4. In `app/api/webhook/route.ts` — uncomment KV read code
+## Adding more packs
 
----
+Add a new object to the `packs` array in `lib/packs.ts`. Pages are auto-generated.
 
-## Step 6 — Add SoundCloud previews
+## Deploy to Vercel
 
-1. Upload your preview track to SoundCloud
-2. Get the track URL (e.g. `https://soundcloud.com/mojii/guitar-pack-preview`)
-3. Paste into `lib/packs.ts` in the `soundcloudUrl` field
-
----
-
-## Step 7 — Deploy to Vercel
-
-```bash
-npm install -g vercel
-vercel
-```
-
-Or connect your GitHub repo at https://vercel.com/new
-
-Add environment variables in Vercel dashboard:
-
-- `MONOBANK_TOKEN`
-- `RESEND_API_KEY`
-- `NEXT_PUBLIC_SITE_URL=https://mojii.com`
-
----
-
-## Step 8 — Add your domain
-
-1. Buy domain (Namecheap ~$10/yr for .com)
-2. Vercel → Project → Domains → Add `mojii.com`
-3. Update DNS at Namecheap as Vercel instructs
-
----
-
-## Adding more packs later
-
-Edit `lib/packs.ts` — add a new object to the `packs` array. That's it. The page is auto-generated.
-
----
+Connect the GitHub repo at [vercel.com/new](https://vercel.com/new). Set the three env variables in Vercel dashboard.
 
 ## Commission summary
 
-| Service                | Cost              |
-| ---------------------- | ----------------- |
-| Vercel hosting         | Free              |
-| Resend emails          | Free (3000/month) |
-| Google Drive           | Free              |
-| Monobank commission    | ~1.5–2% per sale  |
-| **Total per $25 sale** | **~$0.40**        |
+| Service                | Cost               |
+| ---------------------- | ------------------ |
+| Vercel hosting         | Free               |
+| Resend emails          | Free (3,000/month) |
+| Google Drive           | Free               |
+| Monobank commission    | ~1.5-2% per sale   |
+| **Total per $25 sale** | **~$0.40**         |
