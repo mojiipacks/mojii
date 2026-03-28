@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     description: "High-quality royalty-free sample packs for modern producers.",
     images: ["/og-image.jpg"],
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,
