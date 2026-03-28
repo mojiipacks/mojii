@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { LOCALES, LOCALE_LABELS, DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
-export function Navbar({ lang = "en" }: { lang?: Locale }) {
+export function Navbar({ lang = DEFAULT_LOCALE }: { lang?: Locale }) {
   const t = translations[lang];
-  const otherLang = lang === "en" ? "uk" : "en";
+  const otherLang = LOCALES.find((l) => l !== lang) ?? DEFAULT_LOCALE;
   const pathname = usePathname();
   const otherPath = pathname.replace(`/${lang}`, `/${otherLang}`) || `/${otherLang}`;
 
@@ -42,7 +43,7 @@ export function Navbar({ lang = "en" }: { lang?: Locale }) {
           href={otherPath}
           className="text-gray-dim text-xs tracking-widest uppercase hover:text-green-electric transition-colors border border-gray-border px-3 py-1 hover:border-green-electric"
         >
-          {otherLang === "uk" ? "UA" : "EN"}
+          {LOCALE_LABELS[otherLang]}
         </Link>
 
         <Link

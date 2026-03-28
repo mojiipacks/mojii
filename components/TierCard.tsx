@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PackTier } from "@/lib/packs";
 import { translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
 type PackT = {
   back: string;
@@ -25,7 +26,7 @@ type Props = {
   packSlug: string;
   highlighted?: boolean;
   t?: PackT;
-  lang?: string;
+  lang?: Locale;
 };
 
 export function TierCard({
@@ -33,8 +34,8 @@ export function TierCard({
   packTitle,
   packSlug,
   highlighted,
-  t = translations["en"]["pack"],
-  lang = "en",
+  t = translations[DEFAULT_LOCALE]["pack"],
+  lang = DEFAULT_LOCALE,
 }: Props) {
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"idle" | "email" | "loading" | "done" | "error">("idle");

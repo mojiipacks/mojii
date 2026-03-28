@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { packs } from "@/lib/packs";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { resolveLocale } from "@/lib/locales";
 import { PackCard } from "@/components/PackCard";
 import { Hero } from "@/components/Hero";
 import Link from "next/link";
@@ -8,7 +9,7 @@ import Link from "next/link";
 type Props = { params: { lang: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = resolveLocale(params.lang);
   return {
     title: "MOJII — Premium Sample Packs for Producers",
     description:
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function HomePage({ params }: Props) {
-  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = resolveLocale(params.lang);
   const t = translations[lang];
 
   return (

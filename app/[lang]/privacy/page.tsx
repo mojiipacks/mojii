@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { resolveLocale } from "@/lib/locales";
 
 type Props = { params: { lang: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lang = params.lang === "uk" ? "uk" : "en";
+  const lang = resolveLocale(params.lang);
   return {
     title: lang === "uk" ? "Політика конфіденційності | MOJII" : "Privacy Policy | MOJII",
     description:
@@ -126,7 +127,7 @@ const content = {
 };
 
 export default function PrivacyPage({ params }: Props) {
-  const lang = params.lang === "uk" ? "uk" : "en";
+  const lang = resolveLocale(params.lang);
   const c = content[lang];
 
   return (

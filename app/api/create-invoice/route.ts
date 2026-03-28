@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { resolveLocale } from "@/lib/locales";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(req: NextRequest) {
       tierName,
       price,
       email,
-      lang = "en",
+      lang: rawLang = "en",
       packSlug = "guitar-pack",
     } = await req.json();
 
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    const lang = resolveLocale(rawLang);
     const amountInKopecks = Math.round(price * 100);
 
     const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}/success?email=${encodeURIComponent(email)}&tier=${tierId}`;

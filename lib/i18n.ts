@@ -1,4 +1,4 @@
-export type Locale = "en" | "uk";
+export type { Locale } from "./locales";
 
 export const translations = {
   en: {

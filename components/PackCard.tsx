@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Pack } from "@/lib/packs";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
 type Props = { pack: Pack; lang?: Locale };
 
-export function PackCard({ pack, lang = "en" }: Props) {
+export function PackCard({ pack, lang = DEFAULT_LOCALE }: Props) {
   const t = translations[lang];
   const minPrice = Math.min(...pack.tiers.map((t) => t.price));
   const maxPrice = Math.max(...pack.tiers.map((t) => t.price));

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
-export function Footer({ lang = "en" }: { lang?: Locale }) {
+export function Footer({ lang = DEFAULT_LOCALE }: { lang?: Locale }) {
   const t = translations[lang];
 
   return (

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPackBySlug, packs } from "@/lib/packs";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { LOCALES, resolveLocale } from "@/lib/locales";
 import { TierCard } from "@/components/TierCard";
 import Link from "next/link";
 
 type Props = { params: { lang: string; slug: string } };
 
 export function generateStaticParams() {
-  const langs = ["en", "uk"];
-  return langs.flatMap((lang) => packs.map((pack) => ({ lang, slug: pack.slug })));
+  return LOCALES.flatMap((lang) => packs.map((pack) => ({ lang, slug: pack.slug })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,7 +27,7 @@ export default function PackPage({ params }: Props) {
   const pack = getPackBySlug(params.slug);
   if (!pack) notFound();
 
-  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = resolveLocale(params.lang);
   const t = translations[lang];
 
   return (

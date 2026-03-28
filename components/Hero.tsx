@@ -2,9 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { translations, type Locale } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
-export function Hero({ lang = "en" }: { lang?: Locale }) {
+export function Hero({ lang = DEFAULT_LOCALE }: { lang?: Locale }) {
   const t = translations[lang];
   const titleRef = useRef<HTMLHeadingElement>(null);
 

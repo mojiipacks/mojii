@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { translations } from "@/lib/i18n";
+import { resolveLocale } from "@/lib/locales";
 
 export const metadata: Metadata = {
   title: "Payment | MOJII",
@@ -14,7 +15,7 @@ export default function SuccessPage({
   params: { lang: string };
   searchParams: { email?: string; tier?: string };
 }) {
-  const lang = params.lang === "uk" ? "uk" : "en";
+  const lang = resolveLocale(params.lang);
   const t = translations[lang].success;
 
   return (

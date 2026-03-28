@@ -1,11 +1,11 @@
 import { MetadataRoute } from "next";
 import { packs } from "@/lib/packs";
+import { LOCALES } from "@/lib/locales";
 
 const BASE = "https://mojii.com";
-const locales = ["en", "uk"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const packPages = locales.flatMap((lang) =>
+  const packPages = LOCALES.flatMap((lang) =>
     packs.map((pack) => ({
       url: `${BASE}/${lang}/packs/${pack.slug}`,
       lastModified: new Date(),
@@ -14,14 +14,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   );
 
-  const homePages = locales.map((lang) => ({
+  const homePages = LOCALES.map((lang) => ({
     url: `${BASE}/${lang}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 1,
   }));
 
-  const legalPages = locales.flatMap((lang) =>
+  const legalPages = LOCALES.flatMap((lang) =>
     ["license", "privacy"].map((page) => ({
       url: `${BASE}/${lang}/${page}`,
       lastModified: new Date(),
