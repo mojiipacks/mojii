@@ -79,7 +79,7 @@ describe("POST /api/create-invoice", () => {
     expect(sentBody.ccy).toBe(840);
     expect(sentBody.merchantPaymInfo.reference).toMatch(/^guitar-basic\|buyer@example\.com\|\d+$/);
     expect(sentBody.merchantPaymInfo.destination).toBe("MOJII GUITAR PACK — BASIC");
-    expect(sentBody.redirectUrl).toContain("https://mojii.com/success");
+    expect(sentBody.redirectUrl).toContain("https://mojii.com/en/success");
     expect(sentBody.redirectUrl).toContain("email=buyer%40example.com");
     expect(sentBody.webhookUrl).toBe("https://mojii.com/api/webhook");
   });
@@ -133,6 +133,6 @@ describe("POST /api/create-invoice", () => {
     await POST(makeRequest(bodyWithoutLang));
 
     const sentBody = JSON.parse(mockFetch.mock.calls[0][1].body);
-    expect(sentBody.redirectUrl).toContain("lang=en");
+    expect(sentBody.redirectUrl).toContain("/en/success");
   });
 });

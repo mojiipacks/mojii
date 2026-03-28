@@ -55,9 +55,9 @@ export const translations = {
       support: "Support",
     },
     success: {
-      title1: "PAYMENT",
-      title2: "SUCCESSFUL",
-      subtitle: "Your download link is on its way.",
+      title1: "THANK",
+      title2: "YOU",
+      subtitle: "If payment was successful, your download link will arrive shortly.",
       emailNote: "Check your inbox at",
       spamNote:
         "Didn't receive the email? Check your spam folder or reply to our email for support.",
@@ -120,9 +120,9 @@ export const translations = {
       support: "Підтримка",
     },
     success: {
-      title1: "ОПЛАТА",
-      title2: "УСПІШНА",
-      subtitle: "Посилання на завантаження вже в дорозі.",
+      title1: "ДЯКУЄМО",
+      title2: "ЗА ЗАМОВЛЕННЯ",
+      subtitle: "Якщо оплата пройшла успішно, посилання на завантаження надійде найближчим часом.",
       emailNote: "Перевір пошту на адресі",
       spamNote: "Не отримав листа? Перевір спам або напиши нам.",
       backBtn: "Повернутись на MOJII",

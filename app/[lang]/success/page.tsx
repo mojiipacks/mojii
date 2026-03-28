@@ -3,16 +3,18 @@ import type { Metadata } from "next";
 import { translations } from "@/lib/i18n";
 
 export const metadata: Metadata = {
-  title: "Payment Successful | MOJII",
+  title: "Payment | MOJII",
   robots: { index: false },
 };
 
 export default function SuccessPage({
+  params,
   searchParams,
 }: {
-  searchParams: { email?: string; tier?: string; lang?: string };
+  params: { lang: string };
+  searchParams: { email?: string; tier?: string };
 }) {
-  const lang = searchParams.lang === "uk" ? "uk" : "en";
+  const lang = params.lang === "uk" ? "uk" : "en";
   const t = translations[lang].success;
 
   return (

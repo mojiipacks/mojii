@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const amountInKopecks = Math.round(price * 100);
 
-    const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/success?email=${encodeURIComponent(email)}&tier=${tierId}&lang=${lang}`;
+    const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}/success?email=${encodeURIComponent(email)}&tier=${tierId}`;
     const cancelUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}/packs/${packSlug}`;
 
     const body = {
