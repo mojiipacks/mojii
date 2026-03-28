@@ -6,8 +6,7 @@ type Props = { params: { lang: string } };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lang = params.lang === "uk" ? "uk" : "en";
   return {
-    title:
-      lang === "uk" ? "Ліцензійна угода | MOJII" : "License Agreement | MOJII",
+    title: lang === "uk" ? "Ліцензійна угода | MOJII" : "License Agreement | MOJII",
     description:
       lang === "uk"
         ? "Ліцензійна угода MOJII для всіх семпл-паків."
@@ -144,13 +143,8 @@ export default function LicensePage({ params }: Props) {
           {c.back}
         </Link>
         <div className="mt-10 mb-12">
-          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-3">
-            {c.label}
-          </p>
-          <h1
-            className="text-6xl text-white"
-            style={{ fontFamily: "Bebas Neue, sans-serif" }}
-          >
+          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-3">{c.label}</p>
+          <h1 className="text-6xl text-white" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
             {c.title}
           </h1>
           <p className="text-gray-dim mt-3 text-sm">{c.updated}</p>

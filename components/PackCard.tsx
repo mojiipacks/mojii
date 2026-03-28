@@ -17,8 +17,7 @@ export function PackCard({ pack, lang = "en" }: Props) {
         <div
           className="relative h-48 bg-matte flex items-center justify-center overflow-hidden"
           style={{
-            background:
-              "linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)",
+            background: "linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)",
           }}
         >
           <div
@@ -47,16 +46,11 @@ export function PackCard({ pack, lang = "en" }: Props) {
           >
             MOJII {pack.title}
           </h3>
-          <p className="text-gray-dim text-sm mb-4 line-clamp-2">
-            {pack.description}
-          </p>
+          <p className="text-gray-dim text-sm mb-4 line-clamp-2">{pack.description}</p>
 
           <div className="flex items-center justify-between">
             <span className="text-white text-sm">
-              {t.packs.from}{" "}
-              <span className="text-green-electric font-medium">
-                ${minPrice}
-              </span>
+              {t.packs.from} <span className="text-green-electric font-medium">${minPrice}</span>
               <span className="text-gray-dim"> – ${maxPrice}</span>
             </span>
             <span className="text-green-electric text-xs tracking-widest uppercase group-hover:translate-x-1 transition-transform duration-200">

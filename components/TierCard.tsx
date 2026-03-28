@@ -35,9 +35,7 @@ export function TierCard({
   lang = "en",
 }: Props) {
   const [email, setEmail] = useState("");
-  const [step, setStep] = useState<
-    "idle" | "email" | "loading" | "done" | "error"
-  >("idle");
+  const [step, setStep] = useState<"idle" | "email" | "loading" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleBuy() {
@@ -100,10 +98,7 @@ export function TierCard({
         </h3>
 
         <div className="flex items-baseline gap-1 mb-8">
-          <span
-            className="text-6xl text-white"
-            style={{ fontFamily: "Bebas Neue, sans-serif" }}
-          >
+          <span className="text-6xl text-white" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
             ${tier.price}
           </span>
           <span className="text-gray-dim text-sm">USD</span>
@@ -111,10 +106,7 @@ export function TierCard({
 
         <ul className="space-y-3 flex-1 mb-8">
           {tier.features.map((f) => (
-            <li
-              key={f}
-              className="flex items-start gap-3 text-sm text-white/70"
-            >
+            <li key={f} className="flex items-start gap-3 text-sm text-white/70">
               <span className="text-green-electric mt-0.5 shrink-0">✓</span>
               {f}
             </li>
@@ -138,9 +130,7 @@ export function TierCard({
               onKeyDown={(e) => e.key === "Enter" && handleBuy()}
               autoFocus
             />
-            {errorMsg && (
-              <p className="text-red-400 text-xs mt-2">{errorMsg}</p>
-            )}
+            {errorMsg && <p className="text-red-400 text-xs mt-2">{errorMsg}</p>}
           </div>
         )}
 
@@ -160,9 +150,7 @@ export function TierCard({
               : `${t.buyBtn} ${tier.name} — $${tier.price}`}
         </button>
 
-        <p className="text-gray-dim text-xs text-center mt-3">
-          {t.securePayment}
-        </p>
+        <p className="text-gray-dim text-xs text-center mt-3">{t.securePayment}</p>
       </div>
     </div>
   );

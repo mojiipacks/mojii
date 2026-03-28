@@ -87,9 +87,7 @@ export function Hero({ lang = "en" }: { lang?: Locale }) {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0"
         style={{ animation: "fadeIn 1s ease 1.2s forwards" }}
       >
-        <span className="text-gray-dim text-xs tracking-[0.3em] uppercase">
-          {t.hero.scroll}
-        </span>
+        <span className="text-gray-dim text-xs tracking-[0.3em] uppercase">{t.hero.scroll}</span>
         <div className="w-px h-12 bg-gradient-to-b from-green-electric to-transparent" />
       </div>
     </section>

@@ -1,6 +1,7 @@
 # MOJII — Setup Guide
 
 ## Stack
+
 - **Next.js 14** — website + SEO + API routes
 - **Vercel** — free hosting
 - **Monobank Acquiring** — payments (~1.5-2% commission)
@@ -46,10 +47,10 @@ Open http://localhost:3000
 
 ```ts
 const DOWNLOAD_LINKS: Record<string, string> = {
-  'guitar-cutted': 'https://drive.google.com/your-cutted-link',
-  'guitar-basic': 'https://drive.google.com/your-basic-link',
-  'guitar-extended': 'https://drive.google.com/your-extended-link',
-}
+  "guitar-cutted": "https://drive.google.com/your-cutted-link",
+  "guitar-basic": "https://drive.google.com/your-basic-link",
+  "guitar-extended": "https://drive.google.com/your-extended-link",
+};
 ```
 
 ---
@@ -81,6 +82,7 @@ vercel
 Or connect your GitHub repo at https://vercel.com/new
 
 Add environment variables in Vercel dashboard:
+
 - `MONOBANK_TOKEN`
 - `RESEND_API_KEY`
 - `NEXT_PUBLIC_SITE_URL=https://mojii.com`
@@ -103,10 +105,10 @@ Edit `lib/packs.ts` — add a new object to the `packs` array. That's it. The pa
 
 ## Commission summary
 
-| Service | Cost |
-|---|---|
-| Vercel hosting | Free |
-| Resend emails | Free (3000/month) |
-| Google Drive | Free |
-| Monobank commission | ~1.5–2% per sale |
-| **Total per $25 sale** | **~$0.40** |
+| Service                | Cost              |
+| ---------------------- | ----------------- |
+| Vercel hosting         | Free              |
+| Resend emails          | Free (3000/month) |
+| Google Drive           | Free              |
+| Monobank commission    | ~1.5–2% per sale  |
+| **Total per $25 sale** | **~$0.40**        |

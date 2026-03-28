@@ -8,8 +8,7 @@ export function Navbar({ lang = "en" }: { lang?: Locale }) {
   const t = translations[lang];
   const otherLang = lang === "en" ? "uk" : "en";
   const pathname = usePathname();
-  const otherPath =
-    pathname.replace(`/${lang}`, `/${otherLang}`) || `/${otherLang}`;
+  const otherPath = pathname.replace(`/${lang}`, `/${otherLang}`) || `/${otherLang}`;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 border-b border-gray-border/50 backdrop-blur-md bg-matte/80">

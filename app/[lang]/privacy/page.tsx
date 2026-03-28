@@ -6,10 +6,7 @@ type Props = { params: { lang: string } };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lang = params.lang === "uk" ? "uk" : "en";
   return {
-    title:
-      lang === "uk"
-        ? "Політика конфіденційності | MOJII"
-        : "Privacy Policy | MOJII",
+    title: lang === "uk" ? "Політика конфіденційності | MOJII" : "Privacy Policy | MOJII",
     description:
       lang === "uk"
         ? "Політика конфіденційності MOJII — як ми збираємо та використовуємо ваші дані."
@@ -30,8 +27,7 @@ const content = {
       },
       {
         title: "2. What Data We Collect",
-        intro:
-          "We collect only the minimum data needed to process your purchase:",
+        intro: "We collect only the minimum data needed to process your purchase:",
         list: [
           "Email address — to deliver your download link after purchase",
           "Payment data — processed entirely by Monobank. We never store card details.",
@@ -85,8 +81,7 @@ const content = {
       },
       {
         title: "2. Які дані ми збираємо",
-        intro:
-          "Ми збираємо лише мінімум даних, необхідних для обробки вашої покупки:",
+        intro: "Ми збираємо лише мінімум даних, необхідних для обробки вашої покупки:",
         list: [
           "Email-адреса — для надсилання посилання на завантаження після оплати",
           "Платіжні дані — повністю обробляються Monobank. Ми ніколи не зберігаємо дані картки.",
@@ -144,13 +139,8 @@ export default function PrivacyPage({ params }: Props) {
           {c.back}
         </Link>
         <div className="mt-10 mb-12">
-          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-3">
-            {c.label}
-          </p>
-          <h1
-            className="text-6xl text-white"
-            style={{ fontFamily: "Bebas Neue, sans-serif" }}
-          >
+          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-3">{c.label}</p>
+          <h1 className="text-6xl text-white" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
             {c.title}
           </h1>
           <p className="text-gray-dim mt-3 text-sm">{c.updated}</p>
@@ -187,9 +177,7 @@ export default function PrivacyPage({ params }: Props) {
                 <ul className="space-y-2">
                   {s.list.map((item) => (
                     <li key={item} className="flex items-start gap-3">
-                      <span className="text-green-electric mt-1 shrink-0">
-                        —
-                      </span>
+                      <span className="text-green-electric mt-1 shrink-0">—</span>
                       {item}
                     </li>
                   ))}

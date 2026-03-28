@@ -9,9 +9,7 @@ type Props = { params: { lang: string; slug: string } };
 
 export function generateStaticParams() {
   const langs = ["en", "uk"];
-  return langs.flatMap((lang) =>
-    packs.map((pack) => ({ lang, slug: pack.slug })),
-  );
+  return langs.flatMap((lang) => packs.map((pack) => ({ lang, slug: pack.slug })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -29,8 +27,7 @@ export default function PackPage({ params }: Props) {
   const pack = getPackBySlug(params.slug);
   if (!pack) notFound();
 
-  const lang =
-    (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
   const t = translations[lang];
 
   return (
@@ -56,14 +53,10 @@ export default function PackPage({ params }: Props) {
             >
               MOJII
               <br />
-              <span className="text-green-electric glow-text">
-                {pack.title}
-              </span>
+              <span className="text-green-electric glow-text">{pack.title}</span>
             </h1>
             <p className="text-gray-dim text-xl mb-8">{pack.subtitle}</p>
-            <p className="text-white/70 leading-relaxed max-w-lg">
-              {pack.longDescription}
-            </p>
+            <p className="text-white/70 leading-relaxed max-w-lg">{pack.longDescription}</p>
           </div>
           <div className="space-y-3">
             {[
@@ -118,9 +111,7 @@ export default function PackPage({ params }: Props) {
             />
           ))}
         </div>
-        <p className="text-gray-dim text-xs text-center mt-8">
-          {t.pack.disclaimer}
-        </p>
+        <p className="text-gray-dim text-xs text-center mt-8">{t.pack.disclaimer}</p>
       </section>
 
       <section className="px-6 pb-16 max-w-7xl mx-auto">

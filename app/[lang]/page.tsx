@@ -8,8 +8,7 @@ import Link from "next/link";
 type Props = { params: { lang: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lang =
-    (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
   return {
     title: "MOJII — Premium Sample Packs for Producers",
     description:
@@ -20,8 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function HomePage({ params }: Props) {
-  const lang =
-    (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
+  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
   const t = translations[lang];
 
   return (
@@ -59,18 +57,12 @@ export default function HomePage({ params }: Props) {
             >
               {t.about.title1}
               <br />
-              <span className="text-green-electric glow-text">
-                {t.about.title2}
-              </span>
+              <span className="text-green-electric glow-text">{t.about.title2}</span>
               <br />
               {t.about.title3}
             </h2>
-            <p className="text-gray-dim text-lg leading-relaxed mb-4">
-              {t.about.p1}
-            </p>
-            <p className="text-gray-dim text-lg leading-relaxed mb-8">
-              {t.about.p2}
-            </p>
+            <p className="text-gray-dim text-lg leading-relaxed mb-4">{t.about.p1}</p>
+            <p className="text-gray-dim text-lg leading-relaxed mb-8">{t.about.p2}</p>
             <a
               href="mailto:goorkeet@gmail.com"
               className="inline-flex items-center gap-2 text-green-electric text-sm tracking-widest uppercase hover:opacity-70 transition-opacity"
@@ -84,19 +76,14 @@ export default function HomePage({ params }: Props) {
               { label: t.about.stats.samples, value: "80+" },
               { label: t.about.stats.license, value: "Royalty Free" },
             ].map((stat) => (
-              <div
-                key={stat.label}
-                className="border border-gray-border bg-gloss p-6 rounded-sm"
-              >
+              <div key={stat.label} className="border border-gray-border bg-gloss p-6 rounded-sm">
                 <div
                   className="text-4xl text-green-electric mb-2 glow-text"
                   style={{ fontFamily: "Bebas Neue, sans-serif" }}
                 >
                   {stat.value}
                 </div>
-                <div className="text-gray-dim text-sm uppercase tracking-widest">
-                  {stat.label}
-                </div>
+                <div className="text-gray-dim text-sm uppercase tracking-widest">{stat.label}</div>
               </div>
             ))}
           </div>

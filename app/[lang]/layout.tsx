@@ -1,19 +1,19 @@
-import { translations, type Locale } from '@/lib/i18n'
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
+import { translations, type Locale } from "@/lib/i18n";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'uk' }]
+  return [{ lang: "en" }, { lang: "uk" }];
 }
 
 export default function LangLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: { lang: string }
+  children: React.ReactNode;
+  params: { lang: string };
 }) {
-  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : 'en'
+  const lang = (params.lang as Locale) in translations ? (params.lang as Locale) : "en";
 
   return (
     <>
@@ -21,5 +21,5 @@ export default function LangLayout({
       <main>{children}</main>
       <Footer lang={lang} />
     </>
-  )
+  );
 }

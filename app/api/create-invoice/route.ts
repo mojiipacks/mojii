@@ -2,14 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      tierId,
-      packTitle,
-      tierName,
-      price,
-      email,
-      lang = "en",
-    } = await req.json();
+    const { tierId, packTitle, tierName, price, email, lang = "en" } = await req.json();
 
     if (!tierId || !price || !email) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -45,25 +38,19 @@ export async function POST(req: NextRequest) {
       paymentType: "debit",
     };
 
-    const response = await fetch(
-      "https://api.monobank.ua/api/merchant/invoice/create",
-      {
-        method: "POST",
-        headers: {
-          "X-Token": process.env.MONOBANK_TOKEN!,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
+    const response = await fetch("https://api.monobank.ua/api/merchant/invoice/create", {
+      method: "POST",
+      headers: {
+        "X-Token": process.env.MONOBANK_TOKEN!,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
       const err = await response.text();
       console.error("Monobank error:", err);
-      return NextResponse.json(
-        { error: "Payment provider error" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: "Payment provider error" }, { status: 500 });
     }
 
     const data = await response.json();
@@ -76,9 +63,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("create-invoice error:", err);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

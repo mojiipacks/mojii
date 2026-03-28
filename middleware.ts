@@ -22,9 +22,7 @@ export function middleware(request: NextRequest) {
   if (pathnameHasLocale) return NextResponse.next();
 
   const acceptLanguage = request.headers.get("accept-language") || "";
-  const preferredLocale = acceptLanguage.toLowerCase().includes("uk")
-    ? "uk"
-    : defaultLocale;
+  const preferredLocale = acceptLanguage.toLowerCase().includes("uk") ? "uk" : defaultLocale;
 
   const url = request.nextUrl.clone();
   url.pathname = `/${preferredLocale}${pathname}`;

@@ -1,0 +1,63 @@
+version: "3"
+
+tasks:
+  dev:
+    desc: Start app in dev mode
+    cmds:
+      - pnpm dev
+    aliases: [start]
+
+  clean-start:
+    desc: Nuke dependencies & start fresh
+    cmds:
+      - task: clean
+      - pnpm install
+      - pnpm dev
+
+  build:
+    desc: Build project for production
+    cmds:
+      - pnpm build
+
+  preview:
+    desc: Preview production build locally
+    cmds:
+      - pnpm build
+      - pnpm start
+
+  lint:
+    desc: Fix code style (Auto-fix)
+    cmds:
+      - pnpm format
+
+  check:
+    desc: Read-only check (CI mode)
+    cmds:
+      - pnpm check-types
+
+  test:
+    desc: Run unit tests
+    cmds:
+      - pnpm test
+
+  test:watch:
+    desc: Run unit tests in watch mode
+    cmds:
+      - pnpm test:watch
+
+  type-check:
+    desc: Run TypeScript compiler check
+    cmds:
+      - pnpm check-types
+
+  install:
+    desc: Install dependencies
+    cmds:
+      - pnpm install
+
+  clean:
+    desc: Clean project artifacts and cache
+    cmds:
+      - rm -rf .next
+      - rm -rf node_modules
+      - pnpm store prune
