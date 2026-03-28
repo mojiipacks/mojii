@@ -3,6 +3,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// TODO: replace with real download URLs
 const DOWNLOAD_LINKS: Record<string, string> = {
   "guitar-cutted": "https://drive.google.com/your-cutted-link",
   "guitar-basic": "https://drive.google.com/your-basic-link",
@@ -26,7 +27,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    // reference format: "guitar-basic|user@email.com|1234567890"
     const parts = reference?.split("|");
     if (!parts || parts.length < 2) {
       console.error("Invalid reference format:", reference);
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     const packName = TIER_NAMES[tierId];
 
     await resend.emails.send({
-      from: "MOJII <onboarding@resend.dev>",
+      from: "MOJII <onboarding@resend.dev>", // TODO: replace with verified domain email
       to: email,
       subject: `Your MOJII download is ready 🎸`,
       html: `

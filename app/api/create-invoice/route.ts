@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     const body = {
       amount: amountInKopecks,
-      ccy: 840, // 840 = USD
+      ccy: 840,
       merchantPaymInfo: {
         reference: `${tierId}|${email}|${Date.now()}`,
         destination: `MOJII ${packTitle} — ${tierName}`,
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
       saveCardData: {
         saveCard: false,
       },
-      // Store email in paymentInfo to retrieve in webhook
       validity: 3600,
       paymentType: "debit",
     };
@@ -69,10 +68,6 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    // Save email <-> invoiceId mapping to use in webhook
-    // In production: use a DB (Vercel KV, Supabase, etc.)
-    // For now we pass email via redirectUrl query param and
-    // match it in the webhook via reference
     console.log(`Invoice created: ${data.invoiceId} for ${email}`);
 
     return NextResponse.json({
