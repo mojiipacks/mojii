@@ -72,6 +72,7 @@ export const translations = {
       title1: "PAYMENT",
       title2: "FAILED",
       subtitle: "Something went wrong with your payment. Please try again.",
+      backBtn: "Back to MOJII",
     },
   },
 
@@ -132,7 +133,7 @@ export const translations = {
     success: {
       title1: "ОПЛАТА",
       title2: "УСПІШНА",
-      subtitle: "Посилання на завантаже��ня вже в дорозі.",
+      subtitle: "Посилання на завантаження вже в дорозі.",
       emailNote: "Перевір пошту на адресі",
       spamNote: "Не отримав листа? Перевір спам або напиши нам.",
       backBtn: "Повернутись на MOJII",
@@ -146,6 +147,7 @@ export const translations = {
       title1: "ОПЛАТА",
       title2: "НЕ ПРОЙШЛА",
       subtitle: "Щось пішло не так з оплатою. Спробуйте ще раз.",
+      backBtn: "Повернутись на MOJII",
     },
   },
 } as const;
