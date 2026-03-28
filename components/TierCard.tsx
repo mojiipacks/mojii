@@ -22,6 +22,7 @@ type PackT = {
 type Props = {
   tier: PackTier;
   packTitle: string;
+  packSlug: string;
   highlighted?: boolean;
   t?: PackT;
   lang?: string;
@@ -30,6 +31,7 @@ type Props = {
 export function TierCard({
   tier,
   packTitle,
+  packSlug,
   highlighted,
   t = translations["en"]["pack"],
   lang = "en",
@@ -61,6 +63,7 @@ export function TierCard({
           price: tier.price,
           email,
           lang,
+          packSlug,
         }),
       });
       const data = await res.json();
@@ -69,8 +72,8 @@ export function TierCard({
       } else {
         throw new Error(data.error || "Failed to create invoice");
       }
-    } catch (err: any) {
-      setErrorMsg(err.message || "Something went wrong");
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
       setStep("email");
     }
   }

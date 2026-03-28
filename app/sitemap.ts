@@ -21,20 +21,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1,
   }));
 
-  return [
-    ...homePages,
-    ...packPages,
-    {
-      url: `${BASE}/license`,
+  const legalPages = locales.flatMap((lang) =>
+    ["license", "privacy"].map((page) => ({
+      url: `${BASE}/${lang}/${page}`,
       lastModified: new Date(),
       changeFrequency: "yearly" as const,
       priority: 0.3,
-    },
-    {
-      url: `${BASE}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly" as const,
-      priority: 0.3,
-    },
-  ];
+    })),
+  );
+
+  return [...homePages, ...packPages, ...legalPages];
 }

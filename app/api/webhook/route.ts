@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -16,9 +17,53 @@ const TIER_NAMES: Record<string, string> = {
   "guitar-extended": "GUITAR PACK — EXTENDED",
 };
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+let cachedPubKey: string | null = null;
+
+async function getMonobankPubKey(): Promise<string> {
+  if (cachedPubKey) return cachedPubKey;
+  const res = await fetch("https://api.monobank.ua/api/merchant/pubkey", {
+    headers: { "X-Token": process.env.MONOBANK_TOKEN! },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch pubkey: ${res.status}`);
+  const data = await res.json();
+  cachedPubKey = data.key;
+  return cachedPubKey!;
+}
+
+function verifySignature(rawBody: string, xSign: string, pubKeyBase64: string): boolean {
+  const signatureBuf = Buffer.from(xSign, "base64");
+  const publicKeyBuf = Buffer.from(pubKeyBase64, "base64");
+  const verify = crypto.createVerify("SHA256");
+  verify.write(rawBody);
+  verify.end();
+  return verify.verify(publicKeyBuf, signatureBuf);
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const rawBody = await req.text();
+    const xSign = req.headers.get("x-sign");
+
+    if (xSign) {
+      const pubKey = await getMonobankPubKey();
+      if (!verifySignature(rawBody, xSign, pubKey)) {
+        console.error("Webhook signature verification failed");
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    } else if (process.env.NODE_ENV === "production") {
+      console.error("Missing X-Sign header in production");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = JSON.parse(rawBody);
     console.log("WEBHOOK BODY:", body);
 
     const { status, reference } = body;

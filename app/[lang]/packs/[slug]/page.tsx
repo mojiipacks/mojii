@@ -105,6 +105,7 @@ export default function PackPage({ params }: Props) {
               key={tier.id}
               tier={tier}
               packTitle={pack.title}
+              packSlug={pack.slug}
               highlighted={i === 1}
               t={t.pack}
               lang={lang}

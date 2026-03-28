@@ -13,11 +13,12 @@ export function Hero({ lang = "en" }: { lang?: Locale }) {
     if (!el) return;
     el.style.opacity = "0";
     el.style.transform = "translateY(40px)";
-    setTimeout(() => {
+    const id = setTimeout(() => {
       el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
       el.style.opacity = "1";
       el.style.transform = "translateY(0)";
     }, 100);
+    return () => clearTimeout(id);
   }, []);
 
   return (

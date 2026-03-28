@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { tierId, packTitle, tierName, price, email, lang = "en" } = await req.json();
+    const {
+      tierId,
+      packTitle,
+      tierName,
+      price,
+      email,
+      lang = "en",
+      packSlug = "guitar-pack",
+    } = await req.json();
 
     if (!tierId || !price || !email) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -11,7 +19,7 @@ export async function POST(req: NextRequest) {
     const amountInKopecks = Math.round(price * 100);
 
     const successUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/success?email=${encodeURIComponent(email)}&tier=${tierId}&lang=${lang}`;
-    const cancelUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/packs/guitar-pack`;
+    const cancelUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}/packs/${packSlug}`;
 
     const body = {
       amount: amountInKopecks,
