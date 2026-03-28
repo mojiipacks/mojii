@@ -16,6 +16,9 @@ function makeRequest(body: Record<string, unknown>) {
   });
 }
 
+vi.spyOn(console, "log").mockImplementation(() => {});
+vi.spyOn(console, "error").mockImplementation(() => {});
+
 describe("POST /api/webhook", () => {
   let POST: (req: Request) => Promise<Response>;
 

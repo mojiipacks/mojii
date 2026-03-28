@@ -6,6 +6,9 @@ vi.stubGlobal("fetch", mockFetch);
 vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://mojii.com");
 vi.stubEnv("MONOBANK_TOKEN", "test-token");
 
+vi.spyOn(console, "log").mockImplementation(() => {});
+vi.spyOn(console, "error").mockImplementation(() => {});
+
 function makeRequest(body: Record<string, unknown>) {
   return new Request("http://localhost/api/create-invoice", {
     method: "POST",
