@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const mockSend = vi.fn().mockResolvedValue({ id: "test-email-id" });
+const { mockSend } = vi.hoisted(() => ({
+  mockSend: vi.fn().mockResolvedValue({ id: "test-email-id" }),
+}));
 
 vi.mock("resend", () => ({
   Resend: class {

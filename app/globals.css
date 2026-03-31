@@ -41,18 +41,7 @@ body {
 }
 
 .cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1px solid #39ff1460;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transition:
-    transform 0.15s ease,
-    width 0.2s ease,
-    height 0.2s ease;
-  transform: translate(-13px, -13px);
+  display: none;
 }
 
 ::-webkit-scrollbar {
