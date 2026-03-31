@@ -25,23 +25,6 @@ body {
   color: #ffffff;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  cursor: none;
-}
-
-.cursor {
-  width: 10px;
-  height: 10px;
-  background: #39ff14;
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.1s ease;
-  mix-blend-mode: difference;
-}
-
-.cursor-ring {
-  display: none;
 }
 
 ::-webkit-scrollbar {
