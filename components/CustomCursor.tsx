@@ -16,6 +16,6 @@ export function CustomCursor() {
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
-  return null;
+
   return <div ref={dotRef} className="cursor" />;
 }
