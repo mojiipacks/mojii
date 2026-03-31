@@ -6,9 +6,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // TODO: replace with real download URLs
 const DOWNLOAD_LINKS: Record<string, string> = {
-  "guitar-cutted": "https://drive.google.com/your-cutted-link",
-  "guitar-basic": "https://drive.google.com/your-basic-link",
-  "guitar-extended": "https://drive.google.com/your-extended-link",
+  "guitar-cutted": process.env.GUITAR_CUTTED_LINK ?? "",
+  "guitar-basic": process.env.GUITAR_BASIC_LINK ?? "",
+  "guitar-extended": process.env.GUITAR_EXTENDED_LINK ?? "",
 };
 
 const TIER_NAMES: Record<string, string> = {
