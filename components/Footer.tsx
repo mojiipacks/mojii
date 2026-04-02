@@ -26,6 +26,9 @@ export function Footer({ lang = DEFAULT_LOCALE }: { lang?: Locale }) {
             <Link href={`/${lang}/license`} className="hover:text-white transition-colors">
               {t.footer.license}
             </Link>
+<Link href={`/${lang}/terms`} className="hover:text-white transition-colors">
+  Terms of Service
+            </Link>
             <Link href={`/${lang}/privacy`} className="hover:text-white transition-colors">
               {t.footer.privacy}
             </Link>
