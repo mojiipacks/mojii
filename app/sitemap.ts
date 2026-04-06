@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { packs } from "@/lib/packs";
 import { LOCALES } from "@/lib/locales";
 
-const BASE = "https://mojii.com";
+const BASE = "https://mojii.store";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const packPages = LOCALES.flatMap((lang) =>

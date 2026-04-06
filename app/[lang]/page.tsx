@@ -65,10 +65,10 @@ export default function HomePage({ params }: Props) {
             <p className="text-gray-dim text-lg leading-relaxed mb-4">{t.about.p1}</p>
             <p className="text-gray-dim text-lg leading-relaxed mb-8">{t.about.p2}</p>
             <a
-              href="mailto:goorkeet@gmail.com"
+              href="mailto:support@mojii.store"
               className="inline-flex items-center gap-2 text-green-electric text-sm tracking-widest uppercase hover:opacity-70 transition-opacity"
             >
-              <span>✉</span> goorkeet@gmail.com
+              <span>✉</span> support@mojii.store
             </a>
           </div>
           <div className="grid grid-cols-2 gap-4">

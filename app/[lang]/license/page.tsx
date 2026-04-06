@@ -35,16 +35,25 @@ export default function LicensePage({ params }: Props) {
         </div>
 
         <div className="space-y-10 text-white/70 leading-relaxed">
-
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               1. Grant of License
             </h2>
-            <p>Upon purchasing any MOJII sample pack, you are granted a non-exclusive, worldwide, royalty-free license to use the included WAV files in your original music productions, commercial or non-commercial, without paying additional fees.</p>
+            <p>
+              Upon purchasing any MOJII sample pack, you are granted a non-exclusive, worldwide,
+              royalty-free license to use the included WAV files in your original music productions,
+              commercial or non-commercial, without paying additional fees.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               2. Permitted Uses
             </h2>
             <ul className="space-y-2">
@@ -65,7 +74,10 @@ export default function LicensePage({ params }: Props) {
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               3. Prohibited Uses
             </h2>
             <ul className="space-y-2">
@@ -84,33 +96,57 @@ export default function LicensePage({ params }: Props) {
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               4. Ownership
             </h2>
-            <p>MOJII retains full ownership and copyright of all original recordings. This license grants usage rights only — it does not transfer ownership to you.</p>
+            <p>
+              MOJII retains full ownership and copyright of all original recordings. This license
+              grants usage rights only — it does not transfer ownership to you.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               5. All Tiers
             </h2>
-            <p>CUTTED, BASIC, and EXTENDED are all covered by the same license regardless of tier.</p>
+            <p>
+              CUTTED, BASIC, and EXTENDED are all covered by the same license regardless of tier.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               6. No Credit Required
             </h2>
-            <p>You are not required to credit MOJII in your releases, though it is always appreciated.</p>
+            <p>
+              You are not required to credit MOJII in your releases, though it is always
+              appreciated.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               7. Contact
             </h2>
-            <p>Questions? <a href="mailto:goorkeet@gmail.com" className="text-green-electric hover:opacity-70">goorkeet@gmail.com</a></p>
+            <p>
+              Questions?{" "}
+              <a href="mailto:support@mojii.store" className="text-green-electric hover:opacity-70">
+                support@mojii.store
+              </a>
+            </p>
           </section>
-
         </div>
       </div>
     </div>

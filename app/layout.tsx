@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mojii.com"),
+  metadataBase: new URL("https://mojii.store"),
   title: {
     default: "MOJII — Premium Sample Packs for Producers",
     template: "%s | MOJII",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mojii.com",
+    url: "https://mojii.store",
     siteName: "MOJII",
     title: "MOJII — Premium Sample Packs",
     description: "High-quality royalty-free sample packs for modern producers.",

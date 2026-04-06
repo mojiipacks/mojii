@@ -33,16 +33,26 @@ export default function PrivacyPage({ params }: Props) {
         </div>
 
         <div className="space-y-10 text-white/70 leading-relaxed">
-
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               1. Who We Are
             </h2>
-            <p>MOJII is an independent sample pack brand. Website: mojii.store. Contact: <a href="mailto:goorkeet@gmail.com" className="text-green-electric hover:opacity-70">goorkeet@gmail.com</a></p>
+            <p>
+              MOJII is an independent sample pack brand. Website: mojii.store. Contact:{" "}
+              <a href="mailto:support@mojii.store" className="text-green-electric hover:opacity-70">
+                support@mojii.store
+              </a>
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               2. What Data We Collect
             </h2>
             <p className="mb-3">We collect only what is needed to process your purchase:</p>
@@ -61,7 +71,10 @@ export default function PrivacyPage({ params }: Props) {
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               3. How We Use Your Data
             </h2>
             <ul className="space-y-2">
@@ -79,14 +92,23 @@ export default function PrivacyPage({ params }: Props) {
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               4. Cookies
             </h2>
-            <p>This website does not use tracking, advertising, or analytics cookies. No cookie consent banner is required.</p>
+            <p>
+              This website does not use tracking, advertising, or analytics cookies. No cookie
+              consent banner is required.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               5. Third-Party Services
             </h2>
             <ul className="space-y-2">
@@ -106,26 +128,46 @@ export default function PrivacyPage({ params }: Props) {
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               6. Data Retention
             </h2>
-            <p>Your email is stored only long enough to deliver your download (typically 24 hours). We do not maintain a customer database or mailing list.</p>
+            <p>
+              Your email is stored only long enough to deliver your download (typically 24 hours).
+              We do not maintain a customer database or mailing list.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               7. Your Rights
             </h2>
-            <p>You can request deletion of your data at any time. Contact <a href="mailto:goorkeet@gmail.com" className="text-green-electric hover:opacity-70">goorkeet@gmail.com</a> and we will respond within 72 hours.</p>
+            <p>
+              You can request deletion of your data at any time. Contact{" "}
+              <a href="mailto:support@mojii.store" className="text-green-electric hover:opacity-70">
+                support@mojii.store
+              </a>{" "}
+              and we will respond within 72 hours.
+            </p>
           </section>
 
           <section>
-            <h2 className="text-white text-xl uppercase tracking-widest mb-3" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
+            <h2
+              className="text-white text-xl uppercase tracking-widest mb-3"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
               8. Changes
             </h2>
-            <p>We may update this policy from time to time. Changes will be reflected on this page with an updated date.</p>
+            <p>
+              We may update this policy from time to time. Changes will be reflected on this page
+              with an updated date.
+            </p>
           </section>
-
         </div>
       </div>
     </div>

@@ -13,13 +13,13 @@ Premium sample packs for producers. Next.js 14 + Tailwind CSS + Monobank Acquiri
 
 ## Environment variables
 
-| Variable               | Description                                                         | Example             |
-| ---------------------- | ------------------------------------------------------------------- | ------------------- |
-| `RESEND_API_KEY`       | [Resend](https://resend.com) API key                                | `re_xxxxx`          |
-| `RESEND_FROM_NAME`     | Sender display name                                                 | `MOJII`             |
-| `RESEND_FROM_EMAIL`    | Sender email (must be verified domain or resend.dev)                | `noreply@mojii.com` |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (used for redirects and webhook URLs)               | `https://mojii.com` |
-| `MONOBANK_TOKEN`       | Monobank API token ([docs](https://monobank.ua/api-docs/acquiring)) | `uXxx...`           |
+| Variable               | Description                                                         | Example               |
+| ---------------------- | ------------------------------------------------------------------- | --------------------- |
+| `RESEND_API_KEY`       | [Resend](https://resend.com) API key                                | `re_xxxxx`            |
+| `RESEND_FROM_NAME`     | Sender display name                                                 | `MOJII`               |
+| `RESEND_FROM_EMAIL`    | Sender email (must be verified domain or resend.dev)                | `noreply@mojii.store` |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (used for redirects and webhook URLs)               | `https://mojii.sotre` |
+| `MONOBANK_TOKEN`       | Monobank API token ([docs](https://monobank.ua/api-docs/acquiring)) | `uXxx...`             |
 
 ## Local setup
 
@@ -91,13 +91,13 @@ Set these env variables in Vercel dashboard (Settings -> Environment Variables):
 | ---------------------- | ------------------------- |
 | `RESEND_API_KEY`       | Production Resend API key |
 | `RESEND_FROM_NAME`     | `MOJII`                   |
-| `RESEND_FROM_EMAIL`    | `noreply@mojii.com`       |
-| `NEXT_PUBLIC_SITE_URL` | `https://mojii.com`       |
+| `RESEND_FROM_EMAIL`    | `noreply@mojii.store`     |
+| `NEXT_PUBLIC_SITE_URL` | `https://mojii.store`     |
 | `MONOBANK_TOKEN`       | Merchant acquiring token  |
 
 Before going live:
 
-- Verify `mojii.com` domain in Resend (Settings -> Domains -> add DNS records)
+- Verify `mojii.store` domain in Resend (Settings -> Domains -> add DNS records)
 - Get a real merchant token from Monobank (app -> Acquiring section)
 - Replace placeholder download URLs in `app/api/webhook/route.ts`
 

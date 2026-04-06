@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/success"],
     },
-    sitemap: "https://mojii.com/sitemap.xml",
+    sitemap: "https://mojii.store/sitemap.xml",
   };
 }

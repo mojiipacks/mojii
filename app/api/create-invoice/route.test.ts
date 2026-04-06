@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
 
-vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://mojii.com");
+vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://mojii.store");
 vi.stubEnv("MONOBANK_TOKEN", "test-token");
 
 vi.spyOn(console, "log").mockImplementation(() => {});
@@ -87,10 +87,10 @@ describe("POST /api/create-invoice", () => {
     expect(sentBody.ccy).toBe(840);
     expect(sentBody.merchantPaymInfo.reference).toMatch(/^guitar-basic\|buyer@example\.com\|\d+$/);
     expect(sentBody.merchantPaymInfo.destination).toBe("MOJII GUITAR PACK — BASIC");
-    expect(sentBody.redirectUrl).toContain("https://mojii.com/en/success");
+    expect(sentBody.redirectUrl).toContain("https://mojii.store/en/success");
     expect(sentBody.redirectUrl).toContain("email=buyer%40example.com");
-    expect(sentBody.webhookUrl).toBe("https://mojii.com/api/webhook");
-    expect(sentBody.cancelUrl).toBe("https://mojii.com/en/packs/guitar-pack");
+    expect(sentBody.webhookUrl).toBe("https://mojii.store/api/webhook");
+    expect(sentBody.cancelUrl).toBe("https://mojii.store/en/packs/guitar-pack");
   });
 
   it("returns pageUrl and invoiceId on success", async () => {
