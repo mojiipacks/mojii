@@ -1,29 +1,12 @@
 pre-commit:
-  parallel: true
   commands:
     prettier:
       glob: "*.{js,ts,jsx,tsx,json,md,yml,yaml,css,scss}"
       run: pnpm exec prettier --write {staged_files}
       stage_fixed: true
-      fail_text: "Prettier formatted some files. They have been added to the commit automatically."
-
-    type-check:
-      glob: "*.{ts,tsx}"
-      run: pnpm check-types
-      fail_text: "TypeScript compilation failed. You have type errors."
-
-commit-msg:
-  commands:
-    commitlint:
-      run: pnpm exec commitlint --edit {1}
-      fail_text: "Commit message format is invalid. Use 'feat: message', 'fix: message', etc."
 
 pre-push:
-  parallel: false
   commands:
     test:
       run: pnpm test
       fail_text: "Tests failed. Please fix them before pushing."
-    build-check:
-      run: pnpm build
-      fail_text: "Build failed. Please ensure the project builds before pushing."

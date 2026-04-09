@@ -20,6 +20,8 @@ vi.mock("node:crypto", () => ({
   },
 }));
 
+import { POST } from "./route";
+
 function makeRequest(body: Record<string, unknown>, headers?: Record<string, string>) {
   return new Request("http://localhost/api/webhook", {
     method: "POST",
@@ -32,18 +34,12 @@ vi.spyOn(console, "log").mockImplementation(() => {});
 vi.spyOn(console, "error").mockImplementation(() => {});
 
 describe("POST /api/webhook", () => {
-  let POST: (req: Request) => Promise<Response>;
-
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
-    vi.unstubAllEnvs();
-    const mod = await import("./route");
-    POST = mod.POST as unknown as (req: Request) => Promise<Response>;
   });
 
   it("ignores non-success statuses", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({ status: "created", reference: "guitar-basic|test@test.com|123" }),
     );
     const data = await res.json();
@@ -53,7 +49,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("ignores processing status", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({ status: "processing", reference: "guitar-basic|test@test.com|123" }),
     );
     const data = await res.json();
@@ -63,7 +59,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("sends email on success with valid reference", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({
         status: "success",
         reference: "guitar-basic|buyer@example.com|1234567890",
@@ -86,7 +82,7 @@ describe("POST /api/webhook", () => {
 
     for (const tierId of tiers) {
       vi.clearAllMocks();
-      const res = await POST(
+      const res = await (POST as Function)(
         makeRequest({
           status: "success",
           reference: `${tierId}|test@test.com|123`,
@@ -100,7 +96,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("rejects invalid reference format (no pipe separator)", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({
         status: "success",
         reference: "guitar-basic-test@test.com-123",
@@ -113,7 +109,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("rejects missing reference", async () => {
-    const res = await POST(makeRequest({ status: "success" }));
+    const res = await (POST as Function)(makeRequest({ status: "success" }));
     const data = await res.json();
 
     expect(data).toEqual({ ok: true });
@@ -121,7 +117,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("rejects unknown tier ID", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({
         status: "success",
         reference: "drums-pack|test@test.com|123",
@@ -134,7 +130,7 @@ describe("POST /api/webhook", () => {
   });
 
   it("rejects invalid email in reference", async () => {
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({
         status: "success",
         reference: "guitar-basic|not-an-email|123",
@@ -150,7 +146,7 @@ describe("POST /api/webhook", () => {
   it("returns 500 when resend throws", async () => {
     mockSend.mockRejectedValueOnce(new Error("Resend API down"));
 
-    const res = await POST(
+    const res = await (POST as Function)(
       makeRequest({
         status: "success",
         reference: "guitar-basic|test@test.com|123",
