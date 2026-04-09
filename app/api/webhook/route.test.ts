@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockSend } = vi.hoisted(() => ({
-  mockSend: vi.fn().mockResolvedValue({ id: "test-email-id" }),
-}));
+const { mockSend } = vi.hoisted(() => {
+  process.env.GUITAR_CUTTED_LINK = "https://drive.google.com/your-cutted-link";
+  process.env.GUITAR_BASIC_LINK = "https://drive.google.com/your-basic-link";
+  process.env.GUITAR_EXTENDED_LINK = "https://drive.google.com/your-extended-link";
+  return { mockSend: vi.fn().mockResolvedValue({ id: "test-email-id" }) };
+});
 
 vi.mock("resend", () => ({
   Resend: class {
