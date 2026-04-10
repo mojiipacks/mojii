@@ -52,5 +52,6 @@ jobs:
       - run: pnpm build
         env:
           NEXT_PUBLIC_SITE_URL: https://ci.placeholder.local
-          MONOBANK_TOKEN: ci-placeholder
           RESEND_API_KEY: ci-placeholder
+          CREEM_API_KEY: ci-placeholder
+          CREEM_WEBHOOK_SECRET: ci-placeholder

@@ -1,25 +1,34 @@
 # MOJII
 
-Premium sample packs for producers. Next.js 14 + Tailwind CSS + Monobank Acquiring + Resend.
+Premium sample packs for producers. Next.js 14 + Tailwind CSS + Creem + Resend.
 
 ## Stack
 
 - **Next.js 14** (App Router) — pages, API routes, SSG, i18n (en/uk)
 - **Tailwind CSS** — styling
-- **Monobank Acquiring** — payments (~1.5-2% commission)
+- **Creem** — payments (checkout + webhook)
 - **Resend** — transactional email delivery
 - **Vercel** — hosting
 - **Google Drive** — file storage
 
 ## Environment variables
 
-| Variable               | Description                                                         | Example               |
-| ---------------------- | ------------------------------------------------------------------- | --------------------- |
-| `RESEND_API_KEY`       | [Resend](https://resend.com) API key                                | `re_xxxxx`            |
-| `RESEND_FROM_NAME`     | Sender display name                                                 | `MOJII`               |
-| `RESEND_FROM_EMAIL`    | Sender email (must be verified domain or resend.dev)                | `noreply@mojii.store` |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (used for redirects and webhook URLs)               | `https://mojii.sotre` |
-| `MONOBANK_TOKEN`       | Monobank API token ([docs](https://monobank.ua/api-docs/acquiring)) | `uXxx...`             |
+| Variable                        | Description                                                | Example                                      |
+| ------------------------------- | ---------------------------------------------------------- | -------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`          | Public site URL (used for success redirect)                | `https://mojii.store`                        |
+| `RESEND_API_KEY`                | [Resend](https://resend.com) API key                       | `re_xxxxx`                                   |
+| `RESEND_FROM_EMAIL`             | Sender email (must be verified domain or `resend.dev`)     | `noreply@mojii.store`                        |
+| `RESEND_FROM_NAME`              | Sender display name                                        | `MOJII`                                      |
+| `CREEM_API_KEY`                 | [Creem](https://creem.io) API key (test or live)           | `creem_test_xxxxx`                           |
+| `CREEM_WEBHOOK_SECRET`          | Webhook signing secret for HMAC verification               | `whsec_xxxxx`                                |
+| `CREEM_PRODUCT_GUITAR_BASIC`    | Creem product ID for the Guitar Basic pack                 | `prod_xxxxx`                                 |
+| `CREEM_PRODUCT_GUITAR_CUTTED`   | Creem product ID for the Guitar Cutted pack                | `prod_xxxxx`                                 |
+| `CREEM_PRODUCT_GUITAR_EXTENDED` | Creem product ID for the Guitar Extended pack              | `prod_xxxxx`                                 |
+| `CREEM_PRODUCT_DRUMS_STARTER`   | Creem product ID for the Drums Starter pack                | `prod_xxxxx`                                 |
+| `GUITAR_BASIC_LINK`             | Google Drive link delivered after Guitar Basic purchase    | `https://drive.google.com/drive/folders/...` |
+| `GUITAR_CUTTED_LINK`            | Google Drive link delivered after Guitar Cutted purchase   | `https://drive.google.com/drive/folders/...` |
+| `GUITAR_EXTENDED_LINK`          | Google Drive link delivered after Guitar Extended purchase | `https://drive.google.com/drive/folders/...` |
+| `DRUMS_STARTER_LINK`            | Google Drive link delivered after Drums Starter purchase   | `https://drive.google.com/drive/folders/...` |
 
 ## Local setup
 
@@ -35,11 +44,11 @@ Open http://localhost:3000
 
 **Resend:** sign up at [resend.com](https://resend.com) -> API Keys -> Create. For testing, use `onboarding@resend.dev` as `RESEND_FROM_EMAIL` (sends only to account owner email).
 
-**Monobank:** go to [api.monobank.ua](https://api.monobank.ua) -> activate a new token. This personal token works as a test token for acquiring API — no real money is charged, any Luhn-valid card number works.
+**Creem:** sign up at [creem.io](https://creem.io), create products for each pack and copy their IDs into `CREEM_PRODUCT_*`. Grab a test API key from the dashboard and the webhook signing secret from the webhooks section.
 
 ### Testing payment flow
 
-Monobank webhooks need a public URL. Use a tunnel:
+Creem webhooks need a public URL. Use a tunnel:
 
 ```bash
 npx localtunnel --port 3000
@@ -51,13 +60,13 @@ Then update `.env`:
 NEXT_PUBLIC_SITE_URL=https://your-tunnel-url.loca.lt
 ```
 
-Restart dev server. Now:
+Register the tunnel URL + `/api/webhook` as the webhook endpoint in the Creem dashboard and restart dev server. Now:
 
 1. Go to a pack page, click buy, enter email
-2. On Monobank test page: use any card number (e.g. `4111 1111 1111 1111`), any expiry, any CVV
-3. Webhook will hit your tunnel -> email sent -> redirect to success page
+2. Complete checkout on Creem's hosted page using test card details
+3. Webhook hits your tunnel -> email sent -> redirect to success page
 
-Localtunnel URLs change on restart. Update `.env` and restart dev server each time.
+Localtunnel URLs change on restart. Update `.env`, the Creem webhook endpoint, and restart the dev server each time.
 
 ## Development
 
@@ -87,19 +96,28 @@ Repo is connected to Vercel — push to `main` triggers a build.
 
 Set these env variables in Vercel dashboard (Settings -> Environment Variables):
 
-| Variable               | Value                     |
-| ---------------------- | ------------------------- |
-| `RESEND_API_KEY`       | Production Resend API key |
-| `RESEND_FROM_NAME`     | `MOJII`                   |
-| `RESEND_FROM_EMAIL`    | `noreply@mojii.store`     |
-| `NEXT_PUBLIC_SITE_URL` | `https://mojii.store`     |
-| `MONOBANK_TOKEN`       | Merchant acquiring token  |
+| Variable                        | Value                       |
+| ------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_SITE_URL`          | `https://mojii.store`       |
+| `RESEND_API_KEY`                | Production Resend API key   |
+| `RESEND_FROM_EMAIL`             | `noreply@mojii.store`       |
+| `RESEND_FROM_NAME`              | `MOJII`                     |
+| `CREEM_API_KEY`                 | Live Creem API key          |
+| `CREEM_WEBHOOK_SECRET`          | Live webhook signing secret |
+| `CREEM_PRODUCT_GUITAR_BASIC`    | Live product ID             |
+| `CREEM_PRODUCT_GUITAR_CUTTED`   | Live product ID             |
+| `CREEM_PRODUCT_GUITAR_EXTENDED` | Live product ID             |
+| `CREEM_PRODUCT_DRUMS_STARTER`   | Live product ID             |
+| `GUITAR_BASIC_LINK`             | Google Drive folder URL     |
+| `GUITAR_CUTTED_LINK`            | Google Drive folder URL     |
+| `GUITAR_EXTENDED_LINK`          | Google Drive folder URL     |
+| `DRUMS_STARTER_LINK`            | Google Drive folder URL     |
 
 Before going live:
 
 - Verify `mojii.store` domain in Resend (Settings -> Domains -> add DNS records)
-- Get a real merchant token from Monobank (app -> Acquiring section)
-- Replace placeholder download URLs in `app/api/webhook/route.ts`
+- Switch Creem to live mode, create live products, update `CREEM_*` env vars
+- Register the production webhook endpoint in the Creem dashboard
 
 ## Adding a new locale
 
@@ -111,10 +129,9 @@ Add a new object to the `packs` array in `lib/packs.ts`. Pages are auto-generate
 
 ## Commission summary
 
-| Service                | Cost               |
-| ---------------------- | ------------------ |
-| Vercel hosting         | Free               |
-| Resend emails          | Free (3,000/month) |
-| Google Drive           | Free               |
-| Monobank commission    | ~1.5-2% per sale   |
-| **Total per $25 sale** | **~$0.40**         |
+| Service          | Cost                 |
+| ---------------- | -------------------- |
+| Vercel hosting   | Free                 |
+| Resend emails    | Free (3,000/month)   |
+| Google Drive     | Free                 |
+| Creem commission | See creem.io pricing |
