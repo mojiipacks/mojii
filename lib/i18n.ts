@@ -43,14 +43,15 @@ export const translations = {
       emailLabel: "Your email — download link will be sent here",
       emailPlaceholder: "producer@gmail.com",
       proceedBtn: "Proceed to Payment →",
-      creatingInvoice: "Creating invoice...",
-      securePayment: "Secure payment via Monobank",
+      creatingInvoice: "Processing...",
+      securePayment: "Secure checkout",
       emailError: "Please enter a valid email",
     },
     footer: {
       tagline:
         "All samples are 100% royalty-free. Use in commercial projects without additional fees.",
       license: "License",
+      terms: "Terms of Service",
       privacy: "Privacy Policy",
       support: "Support",
     },
@@ -62,70 +63,6 @@ export const translations = {
       spamNote:
         "Didn't receive the email? Check your spam folder or reply to our email for support.",
       backBtn: "Back to MOJII",
-    },
-  },
-
-  uk: {
-    nav: {
-      packs: "Паки",
-      about: "Про нас",
-      shop: "Магазин",
-    },
-    hero: {
-      label: "Преміум семпл-паки",
-      subtitle: "Ручна робота для продюсерів, які відмовляються звучати як усі.",
-      cta: "Переглянути паки",
-      ctaSecondary: "Дізнатися більше",
-      scroll: "Гортай",
-    },
-    packs: {
-      sectionLabel: "Семпл-паки",
-      sectionTitle: "ВСІ ПАКИ",
-      from: "Від",
-      view: "Детальніше →",
-    },
-    about: {
-      label: "Про MOJII",
-      title1: "ЗВУКИ СТВОРЕНІ",
-      title2: "ДЛЯ СПРАВЖНІХ",
-      title3: "ПРОДЮСЕРІВ",
-      p1: "Ми створюємо семпли, натхненні емоціями — вкриті моджіями. Кожен пак записаний з наміром, сформований почуттям і побудований, щоб рухати людей.",
-      p2: "Без наповнювачів. Без пресетів. Тільки сирий WAV матеріал, готовий до вашого DAW.",
-      stats: {
-        packs: "Паків випущено",
-        samples: "Семплів всього",
-        license: "Ліцензія",
-      },
-    },
-    pack: {
-      back: "← Всі паки",
-      preview: "Превью",
-      chooseTier: "Обери свій тір",
-      disclaimer:
-        "Всі ціни в USD. Посилання на завантаження надходить на email одразу після оплати.",
-      mostPopular: "Найпопулярніше",
-      buyBtn: "Купити",
-      emailLabel: "Ваш email — посилання на завантаження буде надіслано сюди",
-      emailPlaceholder: "producer@gmail.com",
-      proceedBtn: "Перейти до оплати →",
-      creatingInvoice: "Створення інвойсу...",
-      securePayment: "Безпечна оплата через Monobank",
-      emailError: "Введіть дійсний email",
-    },
-    footer: {
-      tagline:
-        "Всі семпли на 100% royalty-free. Використовуй у комерційних проєктах без додаткових виплат.",
-      license: "Ліцензія",
-      privacy: "Політика конфіденційності",
-      support: "Підтримка",
-    },
-    success: {
-      title1: "ОПЛАТА",
-      title2: "УСПІШНА",
-      subtitle: "Посилання на завантаження вже в дорозі.",
-      emailNote: "Перевір пошту на адресі",
-      spamNote: "Не отримав листа? Перевір спам або напиши нам.",
-      backBtn: "Повернутись на MOJII",
     },
   },
 } as const;

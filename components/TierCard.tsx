@@ -37,20 +37,11 @@ export function TierCard({
   t = translations[DEFAULT_LOCALE]["pack"],
   lang = DEFAULT_LOCALE,
 }: Props) {
-  const [email, setEmail] = useState("");
-  const [step, setStep] = useState<"idle" | "email" | "loading" | "done" | "error">("idle");
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleBuy() {
-    if (step === "idle") {
-      setStep("email");
-      return;
-    }
-    if (!email || !email.includes("@")) {
-      setErrorMsg("Please enter a valid email");
-      return;
-    }
-    setStep("loading");
+    setLoading(true);
     setErrorMsg("");
 
     try {
@@ -62,7 +53,6 @@ export function TierCard({
           packTitle,
           tierName: tier.name,
           price: tier.price,
-          email,
           lang,
           packSlug,
         }),
@@ -71,11 +61,11 @@ export function TierCard({
       if (data.pageUrl) {
         window.location.href = data.pageUrl;
       } else {
-        throw new Error(data.error || "Failed to create invoice");
+        throw new Error(data.error || "Failed to create checkout");
       }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
-      setStep("email");
+      setLoading(false);
     }
   }
 
@@ -117,41 +107,18 @@ export function TierCard({
           ))}
         </ul>
 
-        {(step === "email" || step === "loading") && (
-          <div className="mb-4">
-            <label className="block text-gray-dim text-xs uppercase tracking-widest mb-2">
-              {t.emailLabel}
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setErrorMsg("");
-              }}
-              placeholder={t.emailPlaceholder}
-              className="w-full bg-matte border border-gray-border text-white px-4 py-3 text-sm outline-none focus:border-green-electric transition-colors placeholder:text-gray-dim/50"
-              onKeyDown={(e) => e.key === "Enter" && handleBuy()}
-              autoFocus
-            />
-            {errorMsg && <p className="text-red-400 text-xs mt-2">{errorMsg}</p>}
-          </div>
-        )}
+        {errorMsg && <p className="text-red-400 text-xs mb-3 text-center">{errorMsg}</p>}
 
         <button
           onClick={handleBuy}
-          disabled={step === "loading"}
+          disabled={loading}
           className={`w-full py-4 text-sm font-medium tracking-widest uppercase transition-all duration-200 ${
             highlighted
               ? "bg-green-electric text-black hover:shadow-[0_0_25px_#39FF1460] disabled:opacity-50"
               : "border border-green-electric text-green-electric hover:bg-green-electric hover:text-black disabled:opacity-50"
           }`}
         >
-          {step === "loading"
-            ? t.creatingInvoice
-            : step === "email"
-              ? t.proceedBtn
-              : `${t.buyBtn} ${tier.name} — $${tier.price}`}
+          {loading ? t.creatingInvoice : `${t.buyBtn} ${tier.name} — $${tier.price}`}
         </button>
 
         <p className="text-gray-dim text-xs text-center mt-3">{t.securePayment}</p>

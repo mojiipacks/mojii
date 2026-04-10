@@ -4,87 +4,77 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// TODO: replace with real download URLs
 const DOWNLOAD_LINKS: Record<string, string> = {
-  "guitar-cutted": process.env.GUITAR_CUTTED_LINK ?? "",
-  "guitar-basic": process.env.GUITAR_BASIC_LINK ?? "",
+  "guitar-cutted":   process.env.GUITAR_CUTTED_LINK ?? "",
+  "guitar-basic":    process.env.GUITAR_BASIC_LINK ?? "",
   "guitar-extended": process.env.GUITAR_EXTENDED_LINK ?? "",
+  "drums-starter":   process.env.DRUMS_STARTER_LINK ?? "",
 };
 
 const TIER_NAMES: Record<string, string> = {
-  "guitar-cutted": "GUITAR PACK — CUTTED",
-  "guitar-basic": "GUITAR PACK — BASIC",
+  "guitar-cutted":   "GUITAR PACK — CUTTED",
+  "guitar-basic":    "GUITAR PACK — BASIC",
   "guitar-extended": "GUITAR PACK — EXTENDED",
+  "drums-starter":   "STARTER DRUMS PACK",
 };
 
-let cachedPubKey: string | null = null;
-
-async function getMonobankPubKey(): Promise<string> {
-  if (cachedPubKey) return cachedPubKey;
-  const res = await fetch("https://api.monobank.ua/api/merchant/pubkey", {
-    headers: { "X-Token": process.env.MONOBANK_TOKEN! },
-  });
-  if (!res.ok) throw new Error(`Failed to fetch pubkey: ${res.status}`);
-  const data = await res.json();
-  cachedPubKey = data.key;
-  return cachedPubKey!;
-}
-
-function verifySignature(rawBody: string, xSign: string, pubKeyBase64: string): boolean {
-  const signatureBuf = Buffer.from(xSign, "base64");
-  const publicKeyBuf = Buffer.from(pubKeyBase64, "base64");
-  const verify = crypto.createVerify("SHA256");
-  verify.write(rawBody);
-  verify.end();
-  return verify.verify(publicKeyBuf, signatureBuf);
+function verifyCreemSignature(payload: string, signature: string, secret: string): boolean {
+  const computed = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex");
+  return computed === signature;
 }
 
 export async function POST(req: NextRequest) {
   try {
     const rawBody = await req.text();
-    const xSign = req.headers.get("x-sign");
+    const signature = req.headers.get("creem-signature");
 
-    if (xSign) {
-      const pubKey = await getMonobankPubKey();
-      if (!verifySignature(rawBody, xSign, pubKey)) {
-        console.error("Webhook signature verification failed");
+    if (process.env.NODE_ENV === "production") {
+      if (!signature) {
+        console.error("Missing creem-signature header");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
-    } else if (process.env.NODE_ENV === "production") {
-      console.error("Missing X-Sign header in production");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      const secret = process.env.CREEM_WEBHOOK_SECRET!;
+      if (!verifyCreemSignature(rawBody, signature, secret)) {
+        console.error("Invalid creem-signature");
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
-    const body = JSON.parse(rawBody);
-    console.log("WEBHOOK BODY:", body);
+    const event = JSON.parse(rawBody);
+    console.log("CREEM WEBHOOK:", event.eventType, event.id);
 
-    const { status, reference } = body;
-
-    if (status !== "success") {
+    if (event.eventType !== "checkout.completed") {
       return NextResponse.json({ ok: true });
     }
 
-    const parts = reference?.split("|");
-    if (!parts || parts.length < 2) {
-      console.error("Invalid reference format:", reference);
-      return NextResponse.json({ ok: true });
-    }
+    const checkout = event.object;
 
-    const tierId = parts[0];
-    const email = parts[1];
+    const email: string =
+      checkout?.customer?.email ??
+      checkout?.request_id?.split("|")[1] ??
+      "";
 
     if (!email || !/.+@.+\..+/.test(email)) {
-      console.error("Invalid email in reference:", reference);
-      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+      console.error("No valid email found in webhook:", checkout?.request_id);
+      return NextResponse.json({ error: "No email" }, { status: 400 });
     }
 
-    if (!DOWNLOAD_LINKS[tierId]) {
-      console.error("Unknown tierId:", tierId);
+    const requestId: string = checkout?.request_id ?? "";
+    const tierId = requestId.split("|")[0];
+    const resolvedTierId = DOWNLOAD_LINKS[tierId]
+      ? tierId
+      : (checkout?.metadata?.tierId as string);
+
+    if (!resolvedTierId || !DOWNLOAD_LINKS[resolvedTierId]) {
+      console.error("Unknown tierId:", tierId, "metadata:", checkout?.metadata);
       return NextResponse.json({ ok: true });
     }
 
-    const downloadUrl = DOWNLOAD_LINKS[tierId];
-    const packName = TIER_NAMES[tierId];
+    const downloadUrl = DOWNLOAD_LINKS[resolvedTierId];
+    const packName = TIER_NAMES[resolvedTierId];
 
     await resend.emails.send({
       from: `${process.env.RESEND_FROM_NAME} <${process.env.RESEND_FROM_EMAIL}>`,
@@ -103,7 +93,6 @@ export async function POST(req: NextRequest) {
               <p style="color:#888888;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin:0 0 40px;">
                 Premium Sample Packs
               </p>
-
               <h2 style="font-size:24px;color:#39FF14;margin:0 0 8px;letter-spacing:2px;">
                 YOUR DOWNLOAD IS READY
               </h2>
@@ -111,18 +100,16 @@ export async function POST(req: NextRequest) {
                 Thank you for purchasing <strong>${packName}</strong>.<br>
                 Click the button below to download your files.
               </p>
-
               <a href="${downloadUrl}"
                 style="display:inline-block;background:#39FF14;color:#000000;text-decoration:none;padding:16px 32px;font-size:13px;letter-spacing:4px;text-transform:uppercase;font-weight:600;">
                 Download Now →
               </a>
-
               <p style="color:#555555;font-size:12px;margin:32px 0 0;">
                 This link is for your personal use only. All samples are royalty-free.<br>
                 Questions? Reply to this email.
               </p>
               <p style="color:#333333;font-size:11px;margin:16px 0 0;">
-                © ${new Date().getFullYear()} MOJII
+                © ${new Date().getFullYear()} MOJII · mojii.store
               </p>
             </td></tr>
           </table>

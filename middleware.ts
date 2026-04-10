@@ -19,13 +19,8 @@ export function middleware(request: NextRequest) {
 
   if (pathnameHasLocale) return NextResponse.next();
 
-  const acceptLanguage = request.headers.get("accept-language") || "";
-  const preferredLocale =
-    LOCALES.find((l) => l !== DEFAULT_LOCALE && acceptLanguage.toLowerCase().includes(l)) ??
-    DEFAULT_LOCALE;
-
   const url = request.nextUrl.clone();
-  url.pathname = `/${preferredLocale}${pathname}`;
+  url.pathname = `/${DEFAULT_LOCALE}${pathname}`;
   return NextResponse.redirect(url);
 }
 

@@ -3,19 +3,14 @@ import { packs } from "@/lib/packs";
 import { translations } from "@/lib/i18n";
 import { resolveLocale } from "@/lib/locales";
 import { PackCard } from "@/components/PackCard";
-import { Hero } from "@/components/Hero";
-import Link from "next/link";
 
 type Props = { params: { lang: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lang = resolveLocale(params.lang);
   return {
     title: "MOJII — Premium Sample Packs for Producers",
     description:
-      lang === "uk"
-        ? "Преміум royalty-free семпл-паки. Гітарні лупи та one-shots у 48kHz. Для сучасних продюсерів."
-        : "Premium royalty-free sample packs. Guitar loops and one-shots at 48kHz. Built for modern producers.",
+      "Premium royalty-free sample packs. Guitar loops and one-shots at 48kHz. Built for modern producers.",
   };
 }
 
@@ -25,27 +20,75 @@ export default function HomePage({ params }: Props) {
 
   return (
     <>
-      <Hero lang={lang} />
-
-      <section id="packs" className="px-6 py-24 max-w-7xl mx-auto">
-        <div className="mb-16">
-          <p className="text-green-electric text-sm tracking-[0.3em] uppercase mb-3">
-            {t.packs.sectionLabel}
-          </p>
-          <h2
-            className="text-6xl md:text-8xl text-white"
-            style={{ fontFamily: "Bebas Neue, sans-serif" }}
-          >
-            {t.packs.sectionTitle}
-          </h2>
+      {/* Hero + Packs — single screen, no scroll needed */}
+      <section className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-12 relative overflow-hidden">
+        {/* Background grid */}
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(#39FF14 1px, transparent 1px), linear-gradient(90deg, #39FF14 1px, transparent 1px)",
+              backgroundSize: "80px 80px",
+            }}
+          />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {packs.map((pack) => (
-            <PackCard key={pack.slug} pack={pack} lang={lang} />
-          ))}
+
+        {/* Green glow */}
+        <div
+          className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, #39FF1408 0%, transparent 70%)" }}
+        />
+
+        <div className="relative max-w-7xl mx-auto w-full">
+          {/* Label */}
+          <p className="text-green-electric text-xs tracking-[0.4em] uppercase mb-8 opacity-80">
+            {t.hero.label}
+          </p>
+
+          {/* Two columns: logo left, packs right */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-12 items-start">
+            {/* Left: logo + tagline */}
+            <div className="flex flex-col justify-start">
+              <h1
+                className="text-[clamp(64px,10vw,130px)] leading-none text-white mb-6"
+                style={{ fontFamily: "Bebas Neue, sans-serif" }}
+              >
+                MOJ
+                <span className="text-green-electric" style={{ textShadow: "0 0 30px #39FF1480" }}>
+                  II
+                </span>
+              </h1>
+
+              <p className="text-gray-dim text-base leading-relaxed mb-8 max-w-xs">
+                {t.hero.subtitle}
+              </p>
+
+              <a
+                href="#about"
+                className="text-xs tracking-widest uppercase text-gray-dim hover:text-green-electric transition-colors inline-flex items-center gap-2 w-fit"
+              >
+                {t.hero.ctaSecondary}
+                <span className="text-green-electric">→</span>
+              </a>
+            </div>
+
+            {/* Right: packs */}
+            <div id="packs">
+              <p className="text-green-electric text-xs tracking-[0.3em] uppercase mb-4">
+                {t.packs.sectionLabel}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {packs.map((pack) => (
+                  <PackCard key={pack.slug} pack={pack} lang={lang} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* About */}
       <section id="about" className="px-6 py-24 border-t border-gray-border">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div>
@@ -58,7 +101,9 @@ export default function HomePage({ params }: Props) {
             >
               {t.about.title1}
               <br />
-              <span className="text-green-electric glow-text">{t.about.title2}</span>
+              <span className="text-green-electric" style={{ textShadow: "0 0 20px #39FF1480" }}>
+                {t.about.title2}
+              </span>
               <br />
               {t.about.title3}
             </h2>
@@ -79,8 +124,11 @@ export default function HomePage({ params }: Props) {
             ].map((stat) => (
               <div key={stat.label} className="border border-gray-border bg-gloss p-6 rounded-sm">
                 <div
-                  className="text-4xl text-green-electric mb-2 glow-text"
-                  style={{ fontFamily: "Bebas Neue, sans-serif" }}
+                  className="text-4xl text-green-electric mb-2"
+                  style={{
+                    fontFamily: "Bebas Neue, sans-serif",
+                    textShadow: "0 0 15px #39FF1460",
+                  }}
                 >
                   {stat.value}
                 </div>

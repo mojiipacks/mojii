@@ -30,7 +30,7 @@ export const packs: Pack[] = [
     longDescription:
       "MOJII GUITAR PACK delivers hand-recorded guitar samples across three tiers. From 20 essential loops in CUTTED to 60+ samples in EXTENDED — every file recorded at 48kHz and cleared for commercial use. Clean, processed, and ready for any genre.",
     genre: "Multi-genre",
-    key: "All keys included",
+    key: "Different keys & BPM included",
     tags: [
       "guitar",
       "sample pack",
@@ -81,6 +81,48 @@ export const packs: Pack[] = [
         ],
         soundcloudUrl:
           "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2279315369&color=%2339FF14&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true",
+      },
+    ],
+  },
+  {
+    slug: "starter-drums-pack",
+    title: "STARTER DRUMS PACK",
+    subtitle: "Punchy. Clean. Ready to hit.",
+    description:
+      "20 hand-crafted drum one-shots — kicks, snares, percussion and hats. Everything you need to build a groove from scratch.",
+    longDescription:
+      "MOJII STARTER DRUMS PACK gives you 20 carefully selected drum one-shots across four categories: 5 kicks, 5 snares, 5 percussion hits, and 5 hi-hats. Every sample recorded and processed at 48kHz — punchy, clean, and ready to layer in any DAW. No fluff, just the essentials.",
+    genre: "Multi-genre",
+    key: "One-shots — key independent",
+    tags: [
+      "drums",
+      "drum samples",
+      "one-shots",
+      "kicks",
+      "snares",
+      "hi-hats",
+      "percussion",
+      "sample pack",
+      "48khz",
+      "royalty free",
+    ],
+    releaseDate: "2025",
+    tiers: [
+      {
+        id: "drums-starter",
+        name: "STARTER",
+        price: 3,
+        usd: 3,
+        features: [
+          "20 drum one-shots",
+          "5 kicks",
+          "5 snares",
+          "5 percussion hits",
+          "5 hi-hats",
+          "WAV 24-bit / 48kHz",
+          "Royalty-free license",
+        ],
+        soundcloudUrl: "",
       },
     ],
   },
