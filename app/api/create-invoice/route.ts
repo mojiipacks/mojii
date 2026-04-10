@@ -18,8 +18,11 @@ export async function POST(req: NextRequest) {
 
     const lang = resolveLocale(rawLang);
 
-    const isTest = process.env.NODE_ENV !== "production";
-    const apiBase = isTest ? "https://test-api.creem.io" : "https://api.creem.io";
+    const apiBase = process.env.CREEM_API_URL;
+    if (!apiBase) {
+      console.error("CREEM_API_URL is not set");
+      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    }
 
     const productIdMap: Record<string, string> = {
       "guitar-cutted": process.env.CREEM_PRODUCT_GUITAR_CUTTED ?? "",

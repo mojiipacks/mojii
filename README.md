@@ -19,6 +19,7 @@ Premium sample packs for producers. Next.js 14 + Tailwind CSS + Creem + Resend.
 | `RESEND_API_KEY`                | [Resend](https://resend.com) API key                       | `re_xxxxx`                                   |
 | `RESEND_FROM_EMAIL`             | Sender email (must be verified domain or `resend.dev`)     | `noreply@mojii.store`                        |
 | `RESEND_FROM_NAME`              | Sender display name                                        | `MOJII`                                      |
+| `CREEM_API_URL`                 | [Creem](https://creem.io) API base URL (test or live)      | `https://test-api.creem.io`                  |
 | `CREEM_API_KEY`                 | [Creem](https://creem.io) API key (test or live)           | `creem_test_xxxxx`                           |
 | `CREEM_WEBHOOK_SECRET`          | Webhook signing secret for HMAC verification               | `whsec_xxxxx`                                |
 | `CREEM_PRODUCT_GUITAR_BASIC`    | Creem product ID for the Guitar Basic pack                 | `prod_xxxxx`                                 |
