@@ -19,15 +19,13 @@ export async function POST(req: NextRequest) {
     const lang = resolveLocale(rawLang);
 
     const isTest = process.env.NODE_ENV !== "production";
-    const apiBase = isTest
-      ? "https://test-api.creem.io"
-      : "https://api.creem.io";
+    const apiBase = isTest ? "https://test-api.creem.io" : "https://api.creem.io";
 
     const productIdMap: Record<string, string> = {
-      "guitar-cutted":   process.env.CREEM_PRODUCT_GUITAR_CUTTED ?? "",
-      "guitar-basic":    process.env.CREEM_PRODUCT_GUITAR_BASIC ?? "",
+      "guitar-cutted": process.env.CREEM_PRODUCT_GUITAR_CUTTED ?? "",
+      "guitar-basic": process.env.CREEM_PRODUCT_GUITAR_BASIC ?? "",
       "guitar-extended": process.env.CREEM_PRODUCT_GUITAR_EXTENDED ?? "",
-      "drums-starter":   process.env.CREEM_PRODUCT_DRUMS_STARTER ?? "",
+      "drums-starter": process.env.CREEM_PRODUCT_DRUMS_STARTER ?? "",
     };
 
     const productId = productIdMap[tierId];

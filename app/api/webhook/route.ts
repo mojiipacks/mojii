@@ -5,24 +5,21 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const DOWNLOAD_LINKS: Record<string, string> = {
-  "guitar-cutted":   process.env.GUITAR_CUTTED_LINK ?? "",
-  "guitar-basic":    process.env.GUITAR_BASIC_LINK ?? "",
+  "guitar-cutted": process.env.GUITAR_CUTTED_LINK ?? "",
+  "guitar-basic": process.env.GUITAR_BASIC_LINK ?? "",
   "guitar-extended": process.env.GUITAR_EXTENDED_LINK ?? "",
-  "drums-starter":   process.env.DRUMS_STARTER_LINK ?? "",
+  "drums-starter": process.env.DRUMS_STARTER_LINK ?? "",
 };
 
 const TIER_NAMES: Record<string, string> = {
-  "guitar-cutted":   "GUITAR PACK — CUTTED",
-  "guitar-basic":    "GUITAR PACK — BASIC",
+  "guitar-cutted": "GUITAR PACK — CUTTED",
+  "guitar-basic": "GUITAR PACK — BASIC",
   "guitar-extended": "GUITAR PACK — EXTENDED",
-  "drums-starter":   "STARTER DRUMS PACK",
+  "drums-starter": "STARTER DRUMS PACK",
 };
 
 function verifyCreemSignature(payload: string, signature: string, secret: string): boolean {
-  const computed = crypto
-    .createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
+  const computed = crypto.createHmac("sha256", secret).update(payload).digest("hex");
   return computed === signature;
 }
 
@@ -52,10 +49,7 @@ export async function POST(req: NextRequest) {
 
     const checkout = event.object;
 
-    const email: string =
-      checkout?.customer?.email ??
-      checkout?.request_id?.split("|")[1] ??
-      "";
+    const email: string = checkout?.customer?.email ?? checkout?.request_id?.split("|")[1] ?? "";
 
     if (!email || !/.+@.+\..+/.test(email)) {
       console.error("No valid email found in webhook:", checkout?.request_id);
@@ -64,9 +58,7 @@ export async function POST(req: NextRequest) {
 
     const requestId: string = checkout?.request_id ?? "";
     const tierId = requestId.split("|")[0];
-    const resolvedTierId = DOWNLOAD_LINKS[tierId]
-      ? tierId
-      : (checkout?.metadata?.tierId as string);
+    const resolvedTierId = DOWNLOAD_LINKS[tierId] ? tierId : (checkout?.metadata?.tierId as string);
 
     if (!resolvedTierId || !DOWNLOAD_LINKS[resolvedTierId]) {
       console.error("Unknown tierId:", tierId, "metadata:", checkout?.metadata);

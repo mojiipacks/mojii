@@ -35,16 +35,6 @@ tasks:
     cmds:
       - pnpm check-types
 
-  test:
-    desc: Run unit tests
-    cmds:
-      - pnpm test
-
-  test:watch:
-    desc: Run unit tests in watch mode
-    cmds:
-      - pnpm test:watch
-
   type-check:
     desc: Run TypeScript compiler check
     cmds:
