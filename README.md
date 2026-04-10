@@ -73,8 +73,6 @@ Localtunnel URLs change on restart. Update `.env`, the Creem webhook endpoint, a
 | Command            | Description                     |
 | ------------------ | ------------------------------- |
 | `task dev`         | Start dev server                |
-| `task test`        | Run unit tests (vitest)         |
-| `task test:watch`  | Run tests in watch mode         |
 | `task build`       | Production build                |
 | `task lint`        | Format code (prettier)          |
 | `task type-check`  | TypeScript check                |
@@ -84,11 +82,10 @@ Localtunnel URLs change on restart. Update `.env`, the Creem webhook endpoint, a
 
 - **pre-commit**: prettier + type-check
 - **commit-msg**: [conventional commits](https://www.conventionalcommits.org/) via commitlint
-- **pre-push**: tests + build
 
 ## CI
 
-GitHub Actions runs on push/PR to `main`: type-check, test, build.
+GitHub Actions runs on push/PR to `main`: type-check, build.
 
 ## Vercel deployment
 
