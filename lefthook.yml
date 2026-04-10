@@ -4,9 +4,3 @@ pre-commit:
       glob: "*.{js,ts,jsx,tsx,json,md,yml,yaml,css,scss}"
       run: pnpm exec prettier --write {staged_files}
       stage_fixed: true
-
-pre-push:
-  commands:
-    test:
-      run: pnpm test
-      fail_text: "Tests failed. Please fix them before pushing."
